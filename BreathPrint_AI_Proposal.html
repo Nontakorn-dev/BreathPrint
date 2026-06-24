@@ -1,0 +1,1077 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BreathPrint AI — Full Research Proposal (Revised)</title>
+<style>
+  :root{
+    --ink:#11202b; --sub:#3a4a55; --muted:#6b7a85; --line:#dde5ea;
+    --bg:#ffffff; --panel:#f6f9fb; --panel2:#eef4f8;
+    --brand:#0e7c86; --brand2:#0b5d8f; --accent:#e4572e; --good:#2a9d6a;
+    --warn:#d98a00; --bad:#c0392b; --soft:#eaf4f5;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font-family:"Segoe UI","Noto Sans Thai",system-ui,-apple-system,Tahoma,sans-serif;
+    line-height:1.6;font-size:16px;}
+  .wrap{max-width:1080px;margin:0 auto;padding:0 28px 80px;}
+  header.hero{background:linear-gradient(135deg,#0e7c86 0%,#0b5d8f 60%,#0b3f6a 100%);
+    color:#fff;padding:54px 28px 46px;margin-bottom:8px;}
+  header.hero .inner{max-width:1080px;margin:0 auto;}
+  .tag{display:inline-block;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.3);
+    padding:4px 12px;border-radius:30px;font-size:12.5px;letter-spacing:.5px;margin-bottom:14px;}
+  header.hero h1{font-size:34px;margin:6px 0 8px;line-height:1.2;font-weight:800;}
+  header.hero h2{font-size:17px;margin:0 0 18px;font-weight:400;opacity:.92;}
+  header.hero .meta{font-size:13.5px;opacity:.85;border-top:1px solid rgba(255,255,255,.25);padding-top:14px;}
+  h2.sec{font-size:24px;margin:48px 0 6px;padding-top:18px;border-top:3px solid var(--brand);
+    display:flex;align-items:baseline;gap:12px;}
+  h2.sec .n{color:var(--brand);font-weight:800;font-size:20px;}
+  h3{font-size:18.5px;margin:26px 0 8px;color:var(--brand2);}
+  h4{font-size:15.5px;margin:18px 0 6px;color:var(--ink);}
+  p{margin:9px 0;color:var(--sub);}
+  ul,ol{color:var(--sub);margin:8px 0 8px 4px;padding-left:22px;}
+  li{margin:4px 0;}
+  strong{color:var(--ink);}
+  a{color:var(--brand2);text-decoration:none;border-bottom:1px solid #b9d4e2;}
+  code{background:var(--panel2);padding:1px 6px;border-radius:5px;font-size:13.5px;
+    font-family:"Cascadia Code",Consolas,monospace;color:#0b4e57;}
+  .lead{font-size:17px;color:var(--ink);}
+  .panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 20px;margin:16px 0;}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+  @media(max-width:760px){.grid2,.grid3{grid-template-columns:1fr}}
+  .card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px 16px;}
+  .card .ic{font-size:22px}
+  .kpi{font-size:30px;font-weight:800;color:var(--brand);line-height:1;}
+  .kpi small{display:block;font-size:13px;color:var(--muted);font-weight:500;margin-top:6px;}
+  .callout{border-left:5px solid var(--brand);background:var(--soft);padding:14px 18px;border-radius:0 12px 12px 0;margin:16px 0;}
+  .callout.warn{border-color:var(--warn);background:#fff7e8;}
+  .callout.new{border-color:var(--accent);background:#fdeee9;}
+  .callout.good{border-color:var(--good);background:#e9f7f0;}
+  table{width:100%;border-collapse:collapse;margin:14px 0;font-size:13.7px;}
+  th,td{border:1px solid var(--line);padding:8px 10px;text-align:left;vertical-align:top;}
+  th{background:var(--panel2);color:var(--ink);font-weight:700;}
+  tr:nth-child(even) td{background:#fbfdfe;}
+  .pill{display:inline-block;font-size:11.5px;padding:2px 9px;border-radius:20px;font-weight:700;}
+  .pill.win{background:#e9f7f0;color:var(--good);border:1px solid #b9e6cf;}
+  .pill.pick{background:#e4572e;color:#fff;}
+  .pill.old{background:#f0f0f0;color:#888;border:1px solid #ddd;}
+  .pill.mid{background:#fff3da;color:#9a6a00;border:1px solid #f0d79a;}
+  figure{margin:22px 0;background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 14px 8px;
+    box-shadow:0 2px 14px rgba(11,93,143,.06);}
+  figure svg{width:100%;height:auto;display:block;}
+  figcaption{font-size:13px;color:var(--muted);text-align:center;margin-top:8px;padding:0 10px 6px;}
+  figcaption b{color:var(--brand2);}
+  .toc{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 24px;margin:24px 0;}
+  .toc ol{columns:2;column-gap:36px;margin:6px 0 0;}
+  @media(max-width:760px){.toc ol{columns:1}}
+  .toc a{border:none;color:var(--sub);}
+  .toc a:hover{color:var(--brand);}
+  .ref{font-size:13px;color:var(--sub);margin:7px 0;padding-left:26px;text-indent:-26px;}
+  .ref b{color:var(--ink);}
+  .flag{font-size:12px;color:var(--warn);}
+  hr{border:none;border-top:1px dashed var(--line);margin:30px 0;}
+  .footnote{font-size:12.5px;color:var(--muted);}
+  .badge{display:inline-block;background:var(--brand);color:#fff;font-size:11px;padding:2px 8px;border-radius:6px;font-weight:700;vertical-align:middle;}
+  .kpi-table th.col-before{background:#fdeee9;color:#7a3b35;}
+  .kpi-table th.col-after{background:#e9f7f0;color:#1f7a50;}
+  .kpi-table td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap;}
+  .kpi-table td.delta{color:var(--good);font-weight:700;text-align:center;}
+  .kpi-table td.delta.neg{color:var(--bad);}
+  .kpi-table tr.total td{background:var(--panel2);font-weight:700;}
+  .chain-step{display:flex;align-items:flex-start;gap:12px;padding:10px 0;border-bottom:1px dashed var(--line);}
+  .chain-step:last-child{border-bottom:none;}
+  .chain-num{flex:0 0 28px;height:28px;border-radius:50%;background:var(--brand);color:#fff;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;}
+  .chain-body{flex:1;}
+  .chain-body h4{margin:0 0 4px;font-size:14px;}
+  .chain-body p{margin:0;font-size:13.5px;}
+  .chain-arrow{text-align:center;color:var(--muted);font-size:18px;padding:2px 0;}
+  .scenario-tag{font-size:11px;font-weight:700;padding:2px 8px;border-radius:6px;display:inline-block;margin-right:6px;}
+  .scenario-before{background:#fdeee9;color:#c0392b;border:1px solid #f0c4bc;}
+  .scenario-after{background:#e9f7f0;color:#1f7a50;border:1px solid #b9e6cf;}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="inner">
+    <span class="tag">REVISED FULL PROPOSAL · v2.0 · 2026</span>
+    <h1>BreathPrint AI</h1>
+    <h2>An Explainable Audio-Language (Audio-LLM) Platform for Early Screening of PM2.5-Induced Small Airway Dysfunction Using Respiratory Acoustic Biomarkers</h2>
+    <div class="meta">
+      Preventive Pulmonology · Digital Acoustic Biomarkers · Multi-Agent Clinical Intelligence<br>
+      Prepared for: Mahidol University · Context: Northern Thailand PM2.5 burden · Builds on prior work (CardiacZ / APICTA)
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<div class="callout new">
+<strong>อ่านก่อน — สิ่งที่แก้จากฉบับเดิม (What changed in this revision).</strong>
+ฉบับนี้แก้จุดอ่อนเชิงวิทยาศาสตร์ทั้งหมดที่รีวิวไว้ และเพิ่ม (1) <b>Ground-truth ที่ไวกว่า spirometry</b> คือ Impulse Oscillometry; (2) <b>longitudinal study design + sample size + validation metrics</b>; (3) สถาปัตยกรรม AI ที่อัปเดตจาก Qwen2-Audio/SSAMBA เดิมเป็นสแต็ก 2025–2026 ที่ <b>อธิบายผลได้ (explainable audio-LLM)</b>; (4) เหตุผลทางเทคนิคว่า <b>ทำไมต้องดัดแปลง layer ของ VLM/audio-LLM</b> แทน CNN ธรรมดา; และ (5) การวาง novelty ให้ <b>ไม่ซ้ำ</b> กับงาน Resp-Agent (ICLR&nbsp;2026) และ AG-REPA (ICML&nbsp;2026).
+</div>
+
+<div class="toc">
+<strong>สารบัญ (Contents)</strong>
+<ol>
+<li><a href="#s1">Executive Summary</a></li>
+<li><a href="#s2">Background &amp; Problem Statement</a></li>
+<li><a href="#s3">Evidence Base (Verified Citations)</a></li>
+<li><a href="#s4">Research Gap &amp; Differentiation vs Prior Work</a></li>
+<li><a href="#s5">Objectives &amp; Falsifiable Hypotheses</a></li>
+<li><a href="#s6">Why Audio-LLM / VLM, not a CNN</a></li>
+<li><a href="#s7">Can We Modify VLM Layers for Audio? (Yes — how)</a></li>
+<li><a href="#s8">Proposed System Architecture</a></li>
+<li><a href="#s9">Model Selection: Beyond Qwen2-Audio</a></li>
+<li><a href="#s10">Encoder Selection: Beyond SSAMBA</a></li>
+<li><a href="#s11">Respiratory-Specific Training Recipe</a></li>
+<li><a href="#s12">Clinical Ground Truth &amp; Reference Standards</a></li>
+<li><a href="#s13">Datasets</a></li>
+<li><a href="#s14">Study Design, Sample Size &amp; Validation</a></li>
+<li><a href="#s15">Output Design &amp; Explainability</a></li>
+<li><a href="#s16">Ethics, PDPA &amp; Risk Management</a></li>
+<li><a href="#s17">Expected Outcomes &amp; Impact</a></li>
+<li><a href="#s18">Research Impact Chain &amp; Before/After KPI Model</a></li>
+<li><a href="#s19">References</a></li>
+</ol>
+</div>
+
+<!-- ============ 1 ============ -->
+<h2 class="sec" id="s1"><span class="n">1</span> Executive Summary</h2>
+<p class="lead">
+ประเทศไทย โดยเฉพาะภาคเหนือ เผชิญ PM2.5 จากการเผาชีวมวลในระดับที่ติดอันดับเมืองมลพิษสูงสุดของโลกในฤดูหมอกควัน (มี.ค.–เม.ย.) PM2.5 แทรกซึมถึงหลอดลมฝอยและถุงลม ก่อการอักเสบเรื้อรังและ <b>Small Airway Dysfunction (SAD)</b> ซึ่งเป็นรอยโรคแรกสุดของ COPD — เกิด <b>ก่อน</b> ที่ spirometry (FEV1/FVC) จะผิดปกติ
+</p>
+<p>
+<b>BreathPrint AI</b> เป็นแพลตฟอร์มคัดกรอง (ไม่ใช่วินิจฉัย) ที่ใช้ <b>เสียงหายใจและเสียงไอจากสมาร์ทโฟน</b> ร่วมกับ <b>Personal Exposure Dose</b> ของ PM2.5 และข้อมูลสุขภาพ เพื่อค้นหา <b>Digital Acoustic Signature</b> ของความเสียหายปอดระยะต้น จุดต่างเชิงเทคนิคที่เป็นหัวใจคือ เราไม่ใช้ CNN/classifier ทั่วไป แต่ใช้ <b>audio-language model (audio-LLM / "VLM สำหรับเสียง")</b> ที่ <u>ทั้งจำแนกและอธิบายเหตุผลเป็นภาษาธรรมชาติได้</u> — เพราะสัญญาณ SAD ระยะต้นละเอียดเกินกว่าหูมนุษย์จะแยกได้ และแพทย์ต้องการคำอธิบาย ไม่ใช่แค่ผลลัพธ์ตัวเลข
+</p>
+<div class="grid3">
+  <div class="card"><div class="kpi">&lt; 0.7<small>FEV1/FVC ที่ spirometry เพิ่งจับ COPD — สายเกินไป</small></div></div>
+  <div class="card"><div class="kpi">R5–R20<small>IOS จับ SAD ได้ขณะ spirometry ยังปกติ → ใช้เป็น ground truth</small></div></div>
+  <div class="card"><div class="kpi">Explain<small>audio-LLM ให้เหตุผล + ระบุช่วงเวลาเสียงผิดปกติในรอบหายใจ</small></div></div>
+</div>
+
+<!-- ============ FIGURE 1 ============ -->
+<figure>
+<svg viewBox="0 0 1000 300" role="img" aria-label="Disease pathway timeline">
+  <defs>
+    <linearGradient id="g1" x1="0" x2="1"><stop offset="0" stop-color="#bfe3e6"/><stop offset="1" stop-color="#c0392b"/></linearGradient>
+    <marker id="ar" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#0b5d8f"/></marker>
+  </defs>
+  <rect x="40" y="120" width="900" height="20" rx="10" fill="url(#g1)"/>
+  <!-- stages -->
+  <g font-family="Segoe UI" font-size="13">
+    <g text-anchor="middle">
+      <circle cx="130" cy="130" r="9" fill="#0e7c86"/><text x="130" y="105" font-weight="700" fill="#11202b">PM2.5 Exposure</text><text x="130" y="170" fill="#6b7a85">สะสมในหลอดลมฝอย</text>
+      <circle cx="350" cy="130" r="9" fill="#0e7c86"/><text x="350" y="105" font-weight="700" fill="#11202b">Early SAD</text><text x="350" y="170" fill="#6b7a85">อักเสบ / remodeling</text>
+      <circle cx="570" cy="130" r="9" fill="#d98a00"/><text x="570" y="105" font-weight="700" fill="#11202b">Pre-COPD</text><text x="570" y="170" fill="#6b7a85">อาการ+โครงสร้างผิดปกติ<tspan x="570" dy="15">spirometry ยังปกติ</tspan></text>
+      <circle cx="790" cy="130" r="9" fill="#c0392b"/><text x="790" y="105" font-weight="700" fill="#11202b">COPD</text><text x="790" y="170" fill="#6b7a85">FEV1/FVC &lt; 0.7<tspan x="790" dy="15">ย้อนกลับไม่ได้</tspan></text>
+    </g>
+  </g>
+  <!-- detection windows -->
+  <g font-family="Segoe UI">
+    <rect x="690" y="210" width="200" height="46" rx="8" fill="#fbe9e7" stroke="#c0392b"/>
+    <text x="790" y="231" text-anchor="middle" font-size="12.5" font-weight="700" fill="#c0392b">Spirometry detects HERE</text>
+    <text x="790" y="248" text-anchor="middle" font-size="11.5" fill="#7a3b35">โอกาสป้องกันหมดแล้ว</text>
+    <rect x="70" y="210" width="540" height="46" rx="8" fill="#e9f7f0" stroke="#2a9d6a"/>
+    <text x="340" y="231" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1f7a50">BreathPrint AI screens HERE (acoustic + exposure)</text>
+    <text x="340" y="248" text-anchor="middle" font-size="11.5" fill="#2a6b4d">ป้องกัน / ชะลอได้ ก่อนความเสียหายถาวร</text>
+  </g>
+  <line x1="40" y1="190" x2="940" y2="190" stroke="#dde5ea"/>
+</svg>
+<figcaption><b>Figure 1.</b> เส้นทางการดำเนินโรค PM2.5 → SAD → Pre-COPD → COPD. Spirometry จับโรคได้ปลายทาง (แดง) ขณะที่ BreathPrint AI ตั้งเป้าคัดกรองในหน้าต่างต้นทาง (เขียว) ที่ยังป้องกันได้.</figcaption>
+</figure>
+
+<!-- ============ 2 ============ -->
+<h2 class="sec" id="s2"><span class="n">2</span> Background &amp; Problem Statement</h2>
+<p>
+ฝุ่น PM2.5 ขนาด ≤2.5 µm แทรกซึมถึง <b>small airways (หลอดลมฝอย เส้นผ่านศูนย์กลาง &lt;2 มม.)</b> และถุงลม กระตุ้น oxidative stress, การอักเสบผ่าน NF-κB/IL-6/IL-8 และ airway remodeling การวินิจฉัย COPD ปัจจุบันอาศัยเกณฑ์ <code>FEV1/FVC &lt; 0.7</code> หลังพ่นยาขยายหลอดลม แต่หลักฐานทางพยาธิวิทยาชี้ชัดว่า <b>หลอดลมฝอยส่วนปลายถูกทำลายและหายไปก่อน</b> ที่ spirometry และก่อน emphysema จะปรากฏ (McDonough 2011) ทำให้ประชากรจำนวนมากอยู่ในภาวะ <b>Pre-COPD</b> โดยไม่ถูกตรวจพบ
+</p>
+<p>
+ช่องว่างเชิงระบบ: spirometry ต้องใช้ความร่วมมือในการเป่าเต็มแรง (effort-dependent), ต้องมีเครื่องและบุคลากร, และโดยนิยาม <b>ไม่ไวต่อรอยโรคหลอดลมฝอยระยะต้น</b> จึงจำเป็นต้องมีเครื่องมือคัดกรองที่ (ก) เข้าถึงง่ายระดับประชากร, (ข) ไวต่อ small airways, และ (ค) อธิบายผลให้แพทย์เชื่อถือได้
+</p>
+
+<!-- ============ 3 ============ -->
+<h2 class="sec" id="s3"><span class="n">3</span> Evidence Base — Verified Citations</h2>
+<div class="grid2">
+  <div class="card">
+    <h4>① PM2.5 → SAD (population-scale)</h4>
+    <p style="font-size:14px">การศึกษา <b>China Pulmonary Health (CPH), N = 50,479</b> พบ SAD prevalence 43.5% และ <b>PM2.5 สัมพันธ์กับ SAD อย่างอิสระ</b> รวมถึงในผู้ไม่สูบบุหรี่.</p>
+    <p class="footnote">Xiao D, et al. <i>Lancet Respir Med</i> 2020;8(11):1081–1093.</p>
+  </div>
+  <div class="card">
+    <h4>② SAD เป็นรอยโรคแรกของ COPD</h4>
+    <p style="font-size:14px">terminal bronchioles ลดจำนวน 72–89% และพื้นที่หน้าตัดลด 81–99.7% <b>ก่อน</b> emphysema และก่อน spirometry เปลี่ยน.</p>
+    <p class="footnote">Hogg JC, et al. <i>NEJM</i> 2004;350:2645–53. · McDonough JE, et al. <i>NEJM</i> 2011;365:1567–75.</p>
+  </div>
+  <div class="card">
+    <h4>③ Pre-COPD เป็นภาวะที่นิยามแล้ว</h4>
+    <p style="font-size:14px">GOLD นิยาม <b>Pre-COPD</b> = มีอาการ/ความผิดปกติเชิงโครงสร้างหรือหน้าที่ <b>โดย spirometry ยังปกติ</b> และมีความเสี่ยงดำเนินสู่ COPD — เป็นสมอเชิงแนวคิดของโปรเจกต์นี้.</p>
+    <p class="footnote">Han MK, et al. <i>Am J Respir Crit Care Med</i> 2021;203(4):414–423.</p>
+  </div>
+  <div class="card">
+    <h4>④ เสียงไอ/หายใจเป็น biomarker ได้</h4>
+    <p style="font-size:14px">AI จากเสียงไอจำแนก COVID, pneumonia, asthma, COPD, TB ได้; ResApp (เข้าซื้อโดย Pfizer 2022) มีผลิตภัณฑ์ระดับคลินิก. <b>แต่ยังไม่มีงานใดจับ subclinical SAD</b> → คือช่องว่างของเรา.</p>
+    <p class="footnote">Laguarta J, et al. <i>IEEE OJEMB</i> 2020;1:275–281. · Porter P, et al. <i>Respir Res</i> 2019;20:81.</p>
+  </div>
+</div>
+<div class="callout warn">
+<strong>หมายเหตุความถูกต้อง (correctness).</strong> ตัวเลข "29,000 คน" ในฉบับเดิม <b>คลาดเคลื่อน</b> — งานจริงคือ CPH study <b>N = 50,479</b> (Xiao 2020). โปรดอ้างอิงตัวเลขที่ถูกต้องนี้. รายการที่ยังต้องตรวจ DOI/หน้าก่อนส่งจริงถูกทำเครื่องหมาย <span class="flag">⚑</span> ในหัวข้อ References.
+</div>
+
+<!-- ============ 4 ============ -->
+<h2 class="sec" id="s4"><span class="n">4</span> Research Gap &amp; Differentiation vs Prior Work</h2>
+<p>หลักฐานปัจจุบันยืนยันสามความสัมพันธ์แยกกัน แต่ <b>ไม่มีงานใดเชื่อมครบสาย</b> และไม่มีงานใดจับ SAD ระยะ <i>ก่อน</i> spirometry ผิดปกติด้วยเสียง:</p>
+<p style="text-align:center;font-size:15px;color:var(--ink)">
+PM2.5 → SAD &nbsp;✔&nbsp; | &nbsp; SAD → COPD &nbsp;✔&nbsp; | &nbsp; Acoustic → Respiratory disease &nbsp;✔&nbsp; &nbsp;<b style="color:var(--accent)">⟶ แต่ "PM2.5-induced early SAD ตรวจจับจากเสียงได้ก่อน spirometry" = ยังไม่มีใครพิสูจน์</b>
+</p>
+
+<h3>4.1 จุดต่างจากงานที่เกี่ยวข้อง (สำคัญมากเพื่อไม่ให้ซ้ำ)</h3>
+<table>
+<tr><th>มิติ</th><th>CardiacZ (งานเดิมของเรา)</th><th>Resp-Agent (ICLR 2026)</th><th>AG-REPA (ICML 2026)</th><th>BreathPrint AI (เสนอใหม่)</th></tr>
+<tr><td><b>เป้าหมายคลินิก</b></td><td>หัวใจ — แยกชนิด murmur (PCG)</td><td>วินิจฉัยโรคทางเดินหายใจ <i>ที่เป็นแล้ว</i> (asthma/COVID/COPD)</td><td>ไม่ใช่คลินิก — เป็น TTS/TTA generation</td><td class="pill pick" style="display:block;text-align:center">คัดกรอง <b>pre-clinical SAD</b> จาก PM2.5 (ก่อนเป็นโรค)</td></tr>
+<tr><td><b>Ground truth</b></td><td>label murmur</td><td>disease label / EHR</td><td>WER/FAD/MOS (เสียง)</td><td><b>IOS (R5–R20, AX, X5)</b> ที่ไวกว่า spirometry</td></tr>
+<tr><td><b>แกน AI</b></td><td>SSAMBA + Qwen2-Audio LoRA</td><td>DeepSeek-R1 ReAct + BEATs + Longformer + CFM generator</td><td>Qwen3-0.6B + Flow-Matching DiT</td><td>Dasheng/BEATs encoder → audio-LLM + <b>layer-weighted probe</b></td></tr>
+<tr><td><b>นวัตกรรมเฉพาะ</b></td><td>multi-agent murmur</td><td>agent diagnose+generate, Resp-229K</td><td>causal layer selection (Store–Contribute)</td><td><b>Personal Exposure Dose + Personalized Acoustic Baseline + longitudinal pre-COPD</b></td></tr>
+</table>
+<div class="callout good">
+<strong>กลยุทธ์ "คล้ายแต่ไม่ซ้ำ".</strong> เรา <b>ยืมเทคนิค</b> ที่พิสูจน์แล้วจากงานเหล่านี้ (multi-agent, BEATs encoder, และโดยเฉพาะ <b>causal layer-selection จาก AG-REPA ของคุณเอง</b>) แต่ <b>ย้ายไปโจทย์ใหม่</b>: การคัดกรองความเสี่ยงระดับ <i>ก่อนเป็นโรค</i> จากมลพิษ พร้อม exposure modelling และ personalized baseline ซึ่งไม่มีงานใดทำ. นี่ทำให้ผ่านเกณฑ์ originality โดยไม่ทิ้ง know-how เดิม.
+</div>
+
+<!-- ============ 5 ============ -->
+<h2 class="sec" id="s5"><span class="n">5</span> Objectives &amp; Falsifiable Hypotheses</h2>
+<p>ฉบับเดิมตั้ง objective เป็น "พัฒนา X" (engineering goals) ซึ่งทดสอบไม่ได้ ฉบับนี้แปลงเป็น <b>สมมติฐานที่หักล้างได้พร้อมเกณฑ์ความสำเร็จเชิงตัวเลข</b>:</p>
+<table>
+<tr><th>#</th><th>Hypothesis (H)</th><th>Success Criterion (pre-registered)</th></tr>
+<tr><td>H1</td><td>Acoustic biomarkers จำแนกผู้มี SAD (IOS-defined) จากผู้ปกติ <b>ขณะ spirometry ปกติทั้งสองกลุ่ม</b></td><td>AUROC ≥ 0.80; sensitivity ≥ 0.80 ที่ specificity ≥ 0.70 บน external test</td></tr>
+<tr><td>H2</td><td>Audio-LLM + layer-probe ดีกว่า CNN baseline อย่างมีนัยสำคัญ</td><td>ΔAUROC ≥ 0.05, p &lt; 0.05 (DeLong) เทียบ AST/CNN</td></tr>
+<tr><td>H3</td><td>Personal Exposure Dose เพิ่มอำนาจทำนายเหนือเสียงอย่างเดียว</td><td>ΔAUROC ≥ 0.03 จาก multimodal fusion; NRI &gt; 0</td></tr>
+<tr><td>H4</td><td>Personalized baseline (within-subject change) ตรวจจับการเสื่อมได้ไวกว่า cross-sectional</td><td>longitudinal: detect IOS worsening ≥ 6 เดือนก่อน spirometry threshold</td></tr>
+<tr><td>H5</td><td>คำอธิบายของ audio-LLM สอดคล้องกับผู้เชี่ยวชาญ</td><td>clinician agreement (Likert) ≥ 4/5; faithfulness via feature-ablation</td></tr>
+</table>
+
+<!-- ============ 6 ============ -->
+<h2 class="sec" id="s6"><span class="n">6</span> Why an Audio-LLM / "VLM for Sound" — not a Plain CNN</h2>
+<p>คำถามหลักของคุณ: เสียง SAD ระยะต้นหูมนุษย์แยกไม่ออก จึงใช้ CNN/classification ทั่วไปไม่พอ ต้องต่อ audio-LLM ที่อธิบายได้ — <b>ถูกต้องและมีเหตุผลรองรับ</b> ดังนี้:</p>
+<div class="grid2">
+  <div class="card"><span class="ic">🔍</span><h4>1. Subtle, sub-audible features</h4><p style="font-size:14px">รอยโรค small-airway ไม่ก่อ wheeze ที่ได้ยินชัด — เป็นการเปลี่ยนเชิงสเปกตรัม/เวลา ที่ละเอียด. โมเดลขนาดใหญ่ที่ pretrain บนเสียงหลายแสนชั่วโมงมี representation ที่ไวกว่า CNN เล็กที่เทรนบน dataset แพทย์ขนาดเล็ก.</p></div>
+  <div class="card"><span class="ic">💬</span><h4>2. Explanation, not just a label</h4><p style="font-size:14px">CNN ให้แค่ probability. Audio-LLM ให้ <b>เหตุผลเชิงภาษา</b> ("expiratory phase prolonged, reduced high-frequency energy in late expiration, consistent with peripheral airflow limitation") + ระบุ <b>ช่วงเวลา</b> ในรอบหายใจ (time-grounding) → แพทย์ตรวจสอบได้ ลด black-box.</p></div>
+  <div class="card"><span class="ic">🧩</span><h4>3. Multimodal reasoning</h4><p style="font-size:14px">audio-LLM รับ <b>เสียง + metadata (อายุ/เพศ/อุปกรณ์) + exposure + อาการ</b> ในบริบทเดียว และให้เหตุผลข้ามโมดัล — สิ่งที่ CNN ทำไม่ได้โดยธรรมชาติ.</p></div>
+  <div class="card"><span class="ic">📚</span><h4>4. Few-shot / data efficiency</h4><p style="font-size:14px">dataset SAD ที่มี IOS label จะเล็ก. Foundation model + LoRA เรียนได้จากตัวอย่างน้อยกว่าการเทรน CNN จากศูนย์ ลด overfitting.</p></div>
+</div>
+<div class="callout">
+<strong>การออกแบบ "สองหัว" (dual-head).</strong> เราใช้โมเดลเดียวสองโหมด: <b>(a) probe head</b> (linear+GELU+softmax บน hidden states) ให้ logit จำแนกที่ calibrate ได้แม่น และ <b>(b) autoregressive head</b> ของ LLM ให้คำอธิบาย. นี่คือส่วนต่อยอดโดยตรงจากดีไซน์ CardiacZ เดิม (layers 30–31 → classifier) แต่ทำให้ <i>เป็นระบบและอ้างอิงวรรณกรรมได้</i>.
+</div>
+
+<!-- ============ 7 ============ -->
+<h2 class="sec" id="s7"><span class="n">7</span> Can We Modify VLM/Audio-LLM Layers? — Yes, and Here's the Principled Way</h2>
+<p>คำตอบสั้น: <b>ได้ และเป็นเทคนิคที่ตีพิมพ์แล้ว</b> สิ่งที่ CardiacZ ทำ (ดึง layer 30–31 มาเข้า classifier head) คือ <b>"linear probing of internal representations"</b> ซึ่งมีรากฐานทฤษฎีรองรับ 3 เส้น:</p>
+<ol>
+<li><b>SUPERB / ML-SUPERB layer-weighting:</b> ประเมินโมเดลเสียงด้วย <b>ผลรวมถ่วงน้ำหนักที่เรียนรู้ได้ของทุก hidden layer</b> ป้อน head เบา ๆ — น้ำหนักจะบอกว่า layer ไหนสำคัญต่อ task. (Yang et al. 2021)</li>
+<li><b>Mid-depth layers เก็บความหมายดีที่สุด:</b> งานหลายชิ้นพบว่า <b>layer กลาง-ค่อนปลาย</b> มี representation เชิงความหมายดีกว่า layer สุดท้าย (ซึ่งเชี่ยวชาญ next-token). ดังนั้นการเลือก layer 30–31 ของ ~32 layers สอดคล้องวรรณกรรม — แต่ <b>ควรเรียนน้ำหนักบน "แถบ" layer (เช่น 24–31)</b> แทน hard-code.</li>
+<li><b>Causal layer selection — งาน AG-REPA ของคุณเอง:</b> insight "Store–Contribute Dissociation" ที่ว่า <b>layer ที่เก็บข้อมูลมาก ≠ layer ที่มีอิทธิพลเชิงสาเหตุ</b> และใช้ <b>FoG-A probe</b> หา layer ที่ contribute จริง — นำมาใช้เลือก layer สำหรับ probe head ของ BreathPrint ได้โดยตรง. <span class="badge">ต่อยอดงานคุณเอง</span></li>
+</ol>
+
+<!-- ============ FIGURE 3 ============ -->
+<figure>
+<svg viewBox="0 0 1000 430" role="img" aria-label="Audio-LLM with layer-weighted probe and LoRA">
+  <defs>
+    <marker id="a2" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#0b5d8f"/></marker>
+    <marker id="a3" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L8,3 L0,6 Z" fill="#e4572e"/></marker>
+  </defs>
+  <!-- input -->
+  <rect x="20" y="170" width="120" height="90" rx="10" fill="#eef4f8" stroke="#0e7c86"/>
+  <text x="80" y="205" text-anchor="middle" font-size="13" font-weight="700" fill="#11202b">Respiratory</text>
+  <text x="80" y="223" text-anchor="middle" font-size="13" font-weight="700" fill="#11202b">audio</text>
+  <text x="80" y="243" text-anchor="middle" font-size="11" fill="#6b7a85">log-mel</text>
+  <!-- denoiser -->
+  <rect x="165" y="180" width="95" height="70" rx="9" fill="#fff" stroke="#d98a00"/>
+  <text x="212" y="210" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a6a00">Learned</text>
+  <text x="212" y="226" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a6a00">denoiser</text>
+  <!-- encoder -->
+  <rect x="285" y="155" width="120" height="120" rx="10" fill="#eaf4f5" stroke="#0e7c86"/>
+  <text x="345" y="200" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0e7c86">Audio Encoder</text>
+  <text x="345" y="220" text-anchor="middle" font-size="11" fill="#3a4a55">Dasheng / BEATs</text>
+  <text x="345" y="236" text-anchor="middle" font-size="11" fill="#3a4a55">(general-audio SSL)</text>
+  <!-- projection -->
+  <rect x="425" y="185" width="70" height="60" rx="9" fill="#fff" stroke="#0b5d8f"/>
+  <text x="460" y="210" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0b5d8f">Proj /</text>
+  <text x="460" y="225" text-anchor="middle" font-size="10.5" font-weight="700" fill="#0b5d8f">adapter</text>
+  <!-- LLM stack with layers -->
+  <rect x="520" y="70" width="180" height="300" rx="12" fill="#f6f9fb" stroke="#0b5d8f" stroke-width="1.5"/>
+  <text x="610" y="60" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b3f6a">LLM (Qwen2.5-Omni / AF3) + LoRA</text>
+  <g font-size="10.5" text-anchor="middle">
+    <!-- layers -->
+    <rect x="540" y="330" width="140" height="22" rx="5" fill="#e7eef3" stroke="#cfdbe3"/><text x="610" y="345" fill="#6b7a85">layer 1–8</text>
+    <rect x="540" y="300" width="140" height="22" rx="5" fill="#e7eef3" stroke="#cfdbe3"/><text x="610" y="315" fill="#6b7a85">layer 9–16</text>
+    <rect x="540" y="270" width="140" height="22" rx="5" fill="#e7eef3" stroke="#cfdbe3"/><text x="610" y="285" fill="#6b7a85">layer 17–23</text>
+    <rect x="540" y="240" width="140" height="22" rx="5" fill="#cfeede" stroke="#2a9d6a"/><text x="610" y="255" fill="#1f7a50" font-weight="700">layer 24–31 ★</text>
+    <rect x="540" y="210" width="140" height="22" rx="5" fill="#cfeede" stroke="#2a9d6a"/><text x="610" y="225" fill="#1f7a50" font-weight="700">(causal band)</text>
+    <rect x="540" y="100" width="140" height="22" rx="5" fill="#e7eef3" stroke="#cfdbe3"/><text x="610" y="115" fill="#6b7a85">final layer</text>
+  </g>
+  <!-- weighted sum -->
+  <circle cx="770" cy="240" r="26" fill="#e9f7f0" stroke="#2a9d6a"/><text x="770" y="237" text-anchor="middle" font-size="11" font-weight="700" fill="#1f7a50">Σ wᵢ</text><text x="770" y="251" text-anchor="middle" font-size="9" fill="#2a6b4d">learned</text>
+  <!-- probe head -->
+  <rect x="830" y="195" width="150" height="90" rx="10" fill="#fff" stroke="#e4572e" stroke-width="1.5"/>
+  <text x="905" y="222" text-anchor="middle" font-size="11.5" font-weight="700" fill="#e4572e">Probe head</text>
+  <text x="905" y="240" text-anchor="middle" font-size="10.5" fill="#7a3b35">Linear→GELU→Softmax</text>
+  <text x="905" y="262" text-anchor="middle" font-size="11" font-weight="700" fill="#11202b">Risk logit (a)</text>
+  <!-- AR head -->
+  <rect x="830" y="80" width="150" height="80" rx="10" fill="#fff" stroke="#0b5d8f" stroke-width="1.5"/>
+  <text x="905" y="106" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b5d8f">LLM AR head</text>
+  <text x="905" y="126" text-anchor="middle" font-size="10.5" fill="#3a4a55">natural-language</text>
+  <text x="905" y="142" text-anchor="middle" font-size="11" font-weight="700" fill="#11202b">Explanation (b)</text>
+  <!-- arrows -->
+  <g stroke="#0b5d8f" stroke-width="2" fill="none">
+    <line x1="140" y1="215" x2="163" y2="215" marker-end="url(#a2)"/>
+    <line x1="260" y1="215" x2="283" y2="215" marker-end="url(#a2)"/>
+    <line x1="405" y1="215" x2="423" y2="215" marker-end="url(#a2)"/>
+    <line x1="495" y1="215" x2="518" y2="215" marker-end="url(#a2)"/>
+    <line x1="680" y1="120" x2="828" y2="120" marker-end="url(#a2)"/>
+  </g>
+  <g stroke="#2a9d6a" stroke-width="2" fill="none">
+    <line x1="680" y1="232" x2="744" y2="238" marker-end="url(#a2)"/>
+    <line x1="680" y1="220" x2="744" y2="234" marker-end="url(#a2)"/>
+  </g>
+  <line x1="796" y1="240" x2="828" y2="240" stroke="#e4572e" stroke-width="2" fill="none" marker-end="url(#a3)"/>
+</svg>
+<figcaption><b>Figure 3.</b> สถาปัตยกรรม audio-LLM แบบ "สองหัว": encoder (Dasheng/BEATs) → projection → LLM ที่ fine-tune ด้วย LoRA. <b>Probe head</b> ใช้ผลรวมถ่วงน้ำหนักที่เรียนรู้ได้บน <b>แถบ layer เชิงสาเหตุ (24–31, ★)</b> ที่เลือกด้วย FoG-A probe (จาก AG-REPA) → ให้ logit จำแนก (a); ส่วน <b>AR head</b> ของ LLM ให้คำอธิบาย (b). นี่คือการ "ดัดแปลง layer ของ VLM" อย่างมีหลักการ.</figcaption>
+</figure>
+
+<!-- ============ 8 ============ -->
+<h2 class="sec" id="s8"><span class="n">8</span> Proposed System Architecture</h2>
+<figure>
+<svg viewBox="0 0 1000 470" role="img" aria-label="Full system architecture">
+  <defs><marker id="a4" markerWidth="9" markerHeight="9" refX="6" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#6b7a85"/></marker></defs>
+  <!-- Layer titles -->
+  <g font-family="Segoe UI" font-size="12" font-weight="700" fill="#0b3f6a" text-anchor="middle">
+    <text x="120" y="28">INPUT LAYER</text>
+    <text x="370" y="28">FEATURE + ENCODER</text>
+    <text x="620" y="28">MULTI-AGENT ANALYSIS</text>
+    <text x="880" y="28">FUSION + OUTPUT</text>
+  </g>
+  <!-- inputs -->
+  <g font-size="11.5">
+    <rect x="40" y="45" width="160" height="34" rx="7" fill="#eef4f8" stroke="#0e7c86"/><text x="120" y="67" text-anchor="middle" fill="#11202b">🎙 Respiratory + Cough sound</text>
+    <rect x="40" y="88" width="160" height="34" rx="7" fill="#eef4f8" stroke="#0e7c86"/><text x="120" y="110" text-anchor="middle" fill="#11202b">🌫 PM2.5 Exposure (GPS/AQI)</text>
+    <rect x="40" y="131" width="160" height="34" rx="7" fill="#eef4f8" stroke="#0e7c86"/><text x="120" y="153" text-anchor="middle" fill="#11202b">🧍 Health profile</text>
+    <rect x="40" y="174" width="160" height="34" rx="7" fill="#eef4f8" stroke="#0e7c86"/><text x="120" y="196" text-anchor="middle" fill="#11202b">📝 Symptom questionnaire</text>
+    <rect x="40" y="217" width="160" height="34" rx="7" fill="#eef4f8" stroke="#0e7c86"/><text x="120" y="239" text-anchor="middle" fill="#11202b">💨 Peak Expiratory Flow</text>
+    <rect x="40" y="260" width="160" height="34" rx="7" fill="#f3f6f8" stroke="#9fb3bf" stroke-dasharray="4 3"/><text x="120" y="282" text-anchor="middle" fill="#6b7a85">⌚ Wearable (optional)</text>
+  </g>
+  <!-- encoder boxes -->
+  <g font-size="11.5">
+    <rect x="290" y="60" width="160" height="70" rx="9" fill="#eaf4f5" stroke="#0e7c86"/><text x="370" y="88" text-anchor="middle" font-weight="700" fill="#0e7c86">Audio Encoder</text><text x="370" y="106" text-anchor="middle" fill="#3a4a55">Dasheng/BEATs +</text><text x="370" y="121" text-anchor="middle" fill="#3a4a55">learned denoiser</text>
+    <rect x="290" y="145" width="160" height="60" rx="9" fill="#f6f9fb" stroke="#0b5d8f"/><text x="370" y="170" text-anchor="middle" font-weight="700" fill="#0b5d8f">Exposure-Dose</text><text x="370" y="188" text-anchor="middle" fill="#3a4a55">engine (µg·h/wk)</text>
+    <rect x="290" y="220" width="160" height="60" rx="9" fill="#f6f9fb" stroke="#0b5d8f"/><text x="370" y="245" text-anchor="middle" font-weight="700" fill="#0b5d8f">Tabular/Text</text><text x="370" y="263" text-anchor="middle" fill="#3a4a55">embeddings</text>
+  </g>
+  <!-- agents -->
+  <g font-size="11.5">
+    <rect x="540" y="50" width="170" height="40" rx="8" fill="#fff" stroke="#0e7c86"/><text x="625" y="74" text-anchor="middle" font-weight="700" fill="#0e7c86">Acoustic Agent</text>
+    <rect x="540" y="98" width="170" height="40" rx="8" fill="#fff" stroke="#0b5d8f"/><text x="625" y="122" text-anchor="middle" font-weight="700" fill="#0b5d8f">Exposure Agent</text>
+    <rect x="540" y="146" width="170" height="40" rx="8" fill="#fff" stroke="#0b5d8f"/><text x="625" y="170" text-anchor="middle" font-weight="700" fill="#0b5d8f">Clinical Agent</text>
+    <rect x="540" y="194" width="170" height="40" rx="8" fill="#fff" stroke="#0b5d8f"/><text x="625" y="218" text-anchor="middle" font-weight="700" fill="#0b5d8f">Symptom Agent</text>
+    <rect x="540" y="242" width="170" height="40" rx="8" fill="#fff" stroke="#e4572e"/><text x="625" y="266" text-anchor="middle" font-weight="700" fill="#e4572e">Intervention Agent</text>
+    <text x="625" y="300" text-anchor="middle" font-size="10.5" fill="#6b7a85" font-style="italic">orchestrated (ReAct-style planner)</text>
+  </g>
+  <!-- fusion + output -->
+  <rect x="790" y="80" width="180" height="70" rx="10" fill="#eef4f8" stroke="#0b3f6a" stroke-width="1.5"/><text x="880" y="108" text-anchor="middle" font-size="12.5" font-weight="700" fill="#0b3f6a">Fusion Model</text><text x="880" y="126" text-anchor="middle" font-size="10.5" fill="#3a4a55">late + attention fusion</text>
+  <rect x="790" y="165" width="180" height="80" rx="10" fill="#0e7c86"/><text x="880" y="195" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">BreathPrint</text><text x="880" y="214" text-anchor="middle" font-size="13" font-weight="700" fill="#fff">Risk Engine</text><text x="880" y="232" text-anchor="middle" font-size="10.5" fill="#d8f0f1">score 0–100 + calibration</text>
+  <rect x="790" y="260" width="180" height="70" rx="10" fill="#fdeee9" stroke="#e4572e"/><text x="880" y="288" text-anchor="middle" font-size="12" font-weight="700" fill="#e4572e">Personalized</text><text x="880" y="306" text-anchor="middle" font-size="12" font-weight="700" fill="#e4572e">Recommendation</text>
+  <!-- baseline memory -->
+  <rect x="540" y="320" width="430" height="42" rx="9" fill="#f3f7f4" stroke="#2a9d6a" stroke-dasharray="5 3"/>
+  <text x="755" y="346" text-anchor="middle" font-size="11.5" font-weight="700" fill="#1f7a50">↻ Personalized Acoustic Baseline (per-user longitudinal memory → change detection)</text>
+  <!-- arrows columns -->
+  <g stroke="#6b7a85" stroke-width="1.4" fill="none">
+    <line x1="205" y1="120" x2="285" y2="95" marker-end="url(#a4)"/>
+    <line x1="205" y1="150" x2="285" y2="175" marker-end="url(#a4)"/>
+    <line x1="205" y1="235" x2="285" y2="250" marker-end="url(#a4)"/>
+    <line x1="455" y1="95" x2="538" y2="70" marker-end="url(#a4)"/>
+    <line x1="455" y1="175" x2="538" y2="120" marker-end="url(#a4)"/>
+    <line x1="455" y1="250" x2="538" y2="210" marker-end="url(#a4)"/>
+    <line x1="715" y1="120" x2="788" y2="115" marker-end="url(#a4)"/>
+    <line x1="880" y1="150" x2="880" y2="163" marker-end="url(#a4)"/>
+    <line x1="880" y1="245" x2="880" y2="258" marker-end="url(#a4)"/>
+  </g>
+</svg>
+<figcaption><b>Figure 2.</b> สถาปัตยกรรมรวม: 6 โมดัลอินพุต → encoder/feature → <b>5 agents</b> ที่ถูก orchestrate แบบ ReAct → fusion → Risk Engine (calibrated 0–100) → คำแนะนำเฉพาะบุคคล. <b>Personalized Acoustic Baseline</b> เก็บประวัติราย user เพื่อตรวจ "การเปลี่ยนแปลง" แทนการเทียบประชากร.</figcaption>
+</figure>
+
+<!-- ============ 9 ============ -->
+<h2 class="sec" id="s9"><span class="n">9</span> Model Selection — Beyond Qwen2-Audio</h2>
+<p>คำถามคุณ: "มีโมเดลดีกว่า Qwen หรือยัง?" — <b>มี</b> หลายตัวในปี 2025–2026 ที่เหมาะกว่า Qwen2-Audio เดิมสำหรับงานเสียงไม่ใช่ speech (เช่น crackle/wheeze) และ fine-tune ได้:</p>
+<table>
+<tr><th>Model (ปี)</th><th>ผู้พัฒนา</th><th>Encoder→LLM</th><th>เด่น (non-speech, explain, LoRA)</th><th>คำตัดสิน</th></tr>
+<tr><td>Qwen2-Audio (2024)</td><td>Alibaba</td><td>Whisper→linear</td><td>baseline เดิม, ชุมชนใหญ่</td><td><span class="pill old">baseline</span></td></tr>
+<tr><td>Qwen2.5-Omni 7B (2025)</td><td>Alibaba</td><td>block-enc→Thinker-Talker</td><td>best-open MMAU ~65.6, tooling เดียวกับของเดิม</td><td><span class="pill win">drop-in upgrade</span></td></tr>
+<tr><td><b>Audio Flamingo 3 (2025)</b></td><td>NVIDIA/UMD</td><td><b>AF-Whisper→linear</b></td><td>เปิดเต็ม (wts+data+code), <b>LoRA + CoT</b> native, ครอบคลุม sound events, context 10 นาที</td><td><span class="pill pick">PRIMARY</span></td></tr>
+<tr><td>Audio Flamingo Next (2026)</td><td>NVIDIA/UMD</td><td>AF-Whisper, 30 นาที</td><td><b>time-grounding</b> (ระบุช่วงเวลาเสียงผิดปกติ), SOTA open MMAU ~75.8</td><td><span class="pill mid">watch/upgrade</span></td></tr>
+<tr><td>MiDashengLM 7B (2025)</td><td>Xiaomi</td><td><b>Dasheng</b>→Qwen2.5-Omni</td><td>encoder เดียวใช้ทั้ง classify+explain, เร็วกว่า, เปิด</td><td><span class="pill win">unified stack</span></td></tr>
+<tr><td>SALMONN (2024)</td><td>Tsinghua/ByteDance</td><td>Whisper+<b>BEATs</b>→Q-Former</td><td>dual-encoder ครอบคลุม sound events ดี</td><td><span class="pill mid">alt</span></td></tr>
+<tr><td>Gemini 2.5 / GPT-4o audio</td><td>Google/OpenAI</td><td>closed</td><td>fine-tune/ดึง layer <b>ไม่ได้</b></td><td><span class="pill old">baseline เทียบเท่านั้น</span></td></tr>
+</table>
+<div class="callout good">
+<strong>คำแนะนำ:</strong> <b>หลัก = Audio Flamingo 3</b> (เปิดเต็ม + LoRA + อธิบาย + encoder เหมาะเสียงไม่ใช่ speech) · <b>เร็ว/เสี่ยงต่ำ = Qwen2.5-Omni 7B</b> (ย้ายจาก Qwen2-Audio เดิมแทบไม่ต้องแก้ pipeline) · <b>ทางเลือกรวมสแต็ก = MiDashengLM</b> (Dasheng encoder ตัวเดียวป้อนทั้ง classifier และ LLM) · <b>อนาคต = Audio Flamingo Next</b> สำหรับ time-grounding ระบุช่วงเวลาในรอบหายใจ.
+</div>
+
+<!-- ============ 10 ============ -->
+<h2 class="sec" id="s10"><span class="n">10</span> Encoder Selection — Beyond SSAMBA</h2>
+<p>คำถามคุณ: "SSAMBA เก่าไปไหม มี SSM/encoder ที่ดีกว่าไหม?" — <b>SSAMBA ถูกแซงแล้ว</b>. มันเทียบกับ SSAST (2022) และเป็นเรื่อง <i>ประสิทธิภาพ</i> มากกว่าความแม่นสูงสุด:</p>
+<table>
+<tr><th>Encoder (ปี)</th><th>ชนิด</th><th>AudioSet mAP*</th><th>จุดเด่น</th><th>สถานะ</th></tr>
+<tr><td>SSAMBA (2024)</td><td>Bidirectional Mamba SSL</td><td>~0.336 (linear-probe)</td><td>เร็ว/หน่วยความจำต่ำ vs SSAST</td><td><span class="pill old">superseded</span></td></tr>
+<tr><td><b>DASS (2024/25)</b></td><td><b>Distilled SSM</b></td><td><b>47.2–50.2</b> (30–49M)</td><td>SSM ตัวแรกที่ <b>ชนะ transformer</b> บน AudioSet; รับเสียงยาว 2.5 ชม.</td><td><span class="pill pick">SSM successor</span></td></tr>
+<tr><td>BEATs (2022/23)</td><td>SSL + acoustic tokenizer</td><td>48.6</td><td>encoder มาตรฐานของ audio-LLM (SALMONN); ผล respiratory ดี</td><td><span class="pill win">proven</span></td></tr>
+<tr><td>EAT (2024)</td><td>Bootstrap SSL</td><td>~49.5 (large)</td><td>เทรนเร็วกว่า BEATs 10–15×</td><td><span class="pill win">efficient</span></td></tr>
+<tr><td>Dasheng (2024)</td><td>MAE @272k ชม.</td><td>~49.7</td><td>เปิดหลายขนาด, เป็น encoder ของ MiDashengLM</td><td><span class="pill pick">LLM-ready</span></td></tr>
+<tr><td>M2D / M2D-CLAP (2024–25)</td><td>Masked Modeling Duo</td><td>48.5–49.0</td><td>มี <b>specialization ICBHI</b> (medical-aware)</td><td><span class="pill win">medical</span></td></tr>
+<tr><td>AST / PaSST / HTS-AT</td><td>Supervised transformer</td><td>45.9–47.1</td><td>backbone respiratory ที่ใช้บ่อย</td><td><span class="pill mid">classic baseline</span></td></tr>
+</table>
+<p class="footnote">*fine-tuned AS-2M mAP เว้นแต่ระบุ; SSAMBA เป็น linear-probe จึงเทียบตรงไม่ได้.</p>
+<div class="callout good">
+<strong>คำแนะนำ encoder:</strong> <b>หลัก = Dasheng</b> (แม่น + ป้อน MiDashengLM ได้ → encoder เดียวทำทั้ง classify/explain) หรือ <b>BEATs</b> (พิสูจน์ใน respiratory + เข้ากับ SALMONN). <b>ถ้าจะรักษาสาย state-space = DASS</b> (ตัวสืบทอด SSAMBA จริง: เล็กกว่า AST, แม่นกว่า, รับเสียงยาว). พิจารณา <b>M2D-X</b> เพราะมี ICBHI specialization. <u>สรุป: เลิกใช้ SSAMBA, ย้ายไป Dasheng/BEATs (+DASS เป็นสาย SSM)</u>.
+</div>
+<p><b>SSM ยัง competitive ปี 2026 ไหม?</b> — ใช่สำหรับ <i>เสียงยาว/efficiency/edge</i> แต่ transformers/SSL ยังนำด้านความแม่นบนคลิปสั้น และเทรนด์คือ <b>hybrid (Mamba+Transformer)</b>. สำหรับคลิปหายใจสั้นไม่กี่วินาที ความแม่นของ SSL-transformer + เทคนิค respiratory สำคัญกว่าการเลือก SSM.</p>
+
+<!-- ============ 11 ============ -->
+<h2 class="sec" id="s11"><span class="n">11</span> Respiratory-Specific Training Recipe</h2>
+<p>ความแม่นบน ICBHI/SPRSound มาจาก <b>เทคนิคเฉพาะทาง</b> มากกว่าตัว backbone. สูตรที่เสนอ (ทุกข้อมีงานรองรับ):</p>
+<div class="grid2">
+  <div class="card"><h4>① Patch-Mix Contrastive Learning</h4><p style="font-size:14px">augmentation อ้างอิงของ ICBHI (AST + mix patches + contrastive). <span class="footnote">Bae et al., Interspeech 2023.</span></p></div>
+  <div class="card"><h4>② Stethoscope/Device-Guided SCL <span class="badge">สำคัญสุดสำหรับมือถือ</span></h4><p style="font-size:14px">supervised contrastive ข้ามอุปกรณ์ — แก้ domain shift ของ <b>ไมค์สมาร์ทโฟนต่างรุ่น</b> โดยตรง. <span class="footnote">SG-SCL, arXiv 2312.09603.</span></p></div>
+  <div class="card"><h4>③ Metadata-as-Text Fusion (BTS)</h4><p style="font-size:14px">ใส่ อายุ/เพศ/ตำแหน่ง/อุปกรณ์ เป็นข้อความเข้าโมเดล → เพิ่ม ICBHI Score. <span class="footnote">BTS, arXiv 2406.06786.</span></p></div>
+  <div class="card"><h4>④ Learned Denoising Front-End</h4><p style="font-size:14px">แทน "Singular Spectrum Adaptive Model" เดิมด้วย denoiser ที่เรียนรู้ได้ → +20%+ ในสภาพมีเสียงรบกวน (สถานการณ์มือถือจริง). <span class="footnote">Adaptive Differential Denoising, arXiv 2506.02505.</span></p></div>
+  <div class="card"><h4>⑤ Patient-Consistent Multi-Cycle (PC-MCL)</h4><p style="font-size:14px">เรียนแบบ consistent ต่อผู้ป่วย/หลายรอบหายใจ + แก้ class imbalance. <span class="footnote">PC-MCL, arXiv 2601.17080.</span></p></div>
+  <div class="card"><h4>⑥ Class-balanced losses + calibration</h4><p style="font-size:14px">ICBHI 4-class ไม่สมดุลมาก → focal/balanced loss + temperature scaling ให้ความน่าจะเป็นที่เชื่อถือได้ (สำคัญต่อ risk score).</p></div>
+</div>
+
+<!-- ============ 12 ============ -->
+<h2 class="sec" id="s12"><span class="n">12</span> Clinical Ground Truth &amp; Reference Standards <span class="badge">จุดที่เคยเป็น blocker</span></h2>
+<p>ปัญหาใหญ่สุดของฉบับเดิม: ถ้าตั้งใจจับโรค <i>ก่อน spirometry ผิดปกติ</i> แล้วจะใช้อะไรเป็น label? คำตอบ: ใช้ <b>reference standard ที่ไวกว่า spirometry</b>:</p>
+<table>
+<tr><th>Reference</th><th>พารามิเตอร์</th><th>ความเหมาะเป็น "label" คัดกรอง</th></tr>
+<tr><td><b>Impulse Oscillometry (IOS/FOT)</b> <span class="pill pick">PRIMARY label</span></td><td>R5, R20, <b>R5–R20</b> (peripheral), X5, <b>AX</b>, Fres</td><td><b>เหมาะสุด:</b> tidal breathing, effort-independent, ~1 นาที, พกพาได้, เด็กทำได้, ชี้ตรงไปที่ small airways. จับ SAD ได้ขณะ spirometry ปกติ.</td></tr>
+<tr><td>HRCT air-trapping / PRM<sup>fSAD</sup></td><td>parametric response mapping</td><td>ความตรงเชิงโครงสร้างสูง แต่ radiation+ราคา → ใช้เป็น <b>validation sub-cohort</b> เท่านั้น.</td></tr>
+<tr><td>MBW / Lung Clearance Index (LCI)</td><td>LCI, ventilation heterogeneity</td><td>ไวต่อ ventilation heterogeneity แต่ช้า/อุปกรณ์มาก → <b>label ยืนยันรอง</b>.</td></tr>
+<tr><td>Spirometry</td><td>FEV1/FVC, FEF25–75</td><td><b>ไม่ใช่ label</b> แต่เป็น <b>comparator ที่เราจะเอาชนะ</b> (FEF25–75 ใช้เป็น supportive).</td></tr>
+</table>
+<div class="callout">
+<strong>การตัดสินใจหลัก:</strong> ใช้ <b>IOS (R5–R20, AX, X5)</b> เป็น ground-truth หลักในการนิยาม "Early SAD", โดยมี <b>HRCT-PRM</b> ใน sub-cohort และ <b>MBW-LCI</b> เป็น optional. ระบุชัดในข้อเสนอว่า <b>spirometry คือสิ่งที่เราตั้งเป้าจะตรวจได้ไวกว่า ไม่ใช่ label</b>. <span class="footnote">IOS standards: King GG et al., Eur Respir J 2020;55(2):1900753 <span class="flag">⚑ตรวจปี/เล่ม</span>. หลักฐาน IOS ไวกว่า spirometry: Su Z-Q et al., Respir Res 2021;22:68.</span>
+</div>
+
+<!-- ============ 13 ============ -->
+<h2 class="sec" id="s13"><span class="n">13</span> Datasets</h2>
+<table>
+<tr><th>Dataset</th><th>ขนาด / label</th><th>อุปกรณ์</th><th>บทบาทในโปรเจกต์</th></tr>
+<tr><td>ICBHI 2017</td><td>920 rec, 6,898 cycles (crackle/wheeze/both/normal)</td><td>stethoscope หลายรุ่น</td><td>pretrain/benchmark มาตรฐาน</td></tr>
+<tr><td>SPRSound (2022/23)</td><td>เด็ก, event+record labels</td><td>e-stethoscope</td><td>pretrain, event detection</td></tr>
+<tr><td>HF_Lung V1/V2</td><td>~9.7k×15s, breath-phase + CAS/DAS</td><td>e-stethoscope</td><td>breath-phase, adventitious</td></tr>
+<tr><td>Coswara / COUGHVID</td><td>smartphone breath+cough; COUGHVID &gt;25k coughs</td><td><b>สมาร์ทโฟน</b></td><td><b>domain ตรงกับเรา</b> (มือถือ)</td></tr>
+<tr><td>Resp-229K (Resp-Agent)</td><td>229K files, 407+ ชม.</td><td>หลากหลาย</td><td>pretrain/augment (ระวัง license/overlap)</td></tr>
+<tr><td><b>BreathPrint-Chiang Mai (เก็บใหม่)</b> <span class="pill pick">core</span></td><td>prospective cohort + <b>IOS labels</b> + exposure</td><td>สมาร์ทโฟน + IOS</td><td><b>หัวใจของงาน</b> — ไม่มี dataset เดิมที่มี IOS+exposure</td></tr>
+</table>
+<p class="footnote">หมายเหตุ: "Respiratory Sound Database" บน Kaggle = ICBHI ตัวเดียวกัน อย่านับซ้ำ. "Coughscope" ตรวจไม่พบเป็น dataset จริง — ใช้ COUGHVID/Coswara/Cambridge COVID-19 Sounds แทน.</p>
+
+<!-- ============ 14 ============ -->
+<h2 class="sec" id="s14"><span class="n">14</span> Study Design, Sample Size &amp; Validation</h2>
+<div class="grid2">
+<div class="panel">
+<h4>Design</h4>
+<ul>
+<li><b>Phase A — Cross-sectional case-control:</b> เทียบกลุ่ม IOS-defined SAD (spirometry ปกติ) vs control เพื่อทดสอบ H1–H3.</li>
+<li><b>Phase B — Prospective longitudinal:</b> ติดตาม 12–24 เดือนในผู้สัมผัส PM2.5 สูง (เชียงใหม่) วัดเสียง+IOS+exposure ทุก 3 เดือน เพื่อ H4 (personalized baseline).</li>
+<li><b>Recruitment:</b> ผู้ใหญ่อายุ 30–65, รวมผู้ไม่สูบบุหรี่ที่สัมผัส PM2.5 สูง.</li>
+</ul>
+</div>
+<div class="panel">
+<h4>Sample Size (เบื้องต้น)</h4>
+<ul>
+<li>เป้า AUROC ≥ 0.80 (H0: 0.70), α=0.05, power=0.80 → ~<b>180–250</b> ต่อกลุ่ม (ปรับตาม prevalence/clustering).</li>
+<li>เผื่อ dropout 20% และ external validation site แยก.</li>
+<li><b>External validation</b> คนละสถานที่/อุปกรณ์ เพื่อทดสอบ generalizability.</li>
+</ul>
+</div>
+</div>
+<div class="panel">
+<h4>Metrics &amp; Protocol</h4>
+<ul>
+<li><b>หลัก:</b> AUROC, sensitivity@fixed-specificity, calibration (Brier, reliability), DeLong test vs CNN baseline.</li>
+<li><b>Subgroup:</b> ตามอุปกรณ์/เพศ/อายุ/สถานะสูบบุหรี่ (ตรวจ bias/generalizability).</li>
+<li><b>Explainability:</b> clinician agreement (Likert), faithfulness ด้วย feature-ablation/leave-one-modality-out.</li>
+<li><b>Split:</b> patient-level (ห้าม leakage), nested CV, pre-registered analysis plan.</li>
+</ul>
+</div>
+
+<!-- ============ 15 ============ -->
+<h2 class="sec" id="s15"><span class="n">15</span> Output Design &amp; Explainability</h2>
+<figure>
+<svg viewBox="0 0 1000 210" role="img" aria-label="BreathPrint risk score gauge">
+  <defs>
+    <linearGradient id="gg" x1="0" x2="1"><stop offset="0" stop-color="#2a9d6a"/><stop offset="0.4" stop-color="#d98a00"/><stop offset="0.7" stop-color="#e4572e"/><stop offset="1" stop-color="#c0392b"/></linearGradient>
+  </defs>
+  <rect x="60" y="70" width="600" height="26" rx="13" fill="url(#gg)"/>
+  <g font-size="12" fill="#11202b" text-anchor="middle" font-weight="700">
+    <text x="135" y="120">0–30 Low</text>
+    <text x="290" y="120">31–60 Moderate</text>
+    <text x="450" y="120">61–80 High</text>
+    <text x="600" y="120">81–100 Very High</text>
+  </g>
+  <g font-size="10.5" fill="#6b7a85" text-anchor="middle">
+    <text x="60" y="60">0</text><text x="240" y="60">30</text><text x="420" y="60">60</text><text x="540" y="60">80</text><text x="660" y="60">100</text>
+  </g>
+  <polygon points="372,66 364,50 380,50" fill="#11202b"/><text x="372" y="42" text-anchor="middle" font-size="11" font-weight="700" fill="#11202b">คุณ = 58</text>
+  <!-- explanation panel -->
+  <rect x="700" y="40" width="270" height="140" rx="12" fill="#f6f9fb" stroke="#0b5d8f"/>
+  <text x="715" y="62" font-size="12" font-weight="700" fill="#0b3f6a">Explanation (audio-LLM)</text>
+  <g font-size="10.3" fill="#3a4a55">
+    <text x="715" y="82">• Expiratory phase prolonged (I:E ↑)</text>
+    <text x="715" y="100">• ↓ high-freq energy in late expiration</text>
+    <text x="715" y="118">• Event localized at 2.1–2.6 s (time-grounded)</text>
+    <text x="715" y="136">• Exposure dose ↑ vs baseline (+18%)</text>
+    <text x="715" y="158" font-weight="700" fill="#e4572e">→ แนะนำตรวจ IOS / พบแพทย์ปอด</text>
+  </g>
+</svg>
+<figcaption><b>Figure 4.</b> ผลลัพธ์: <b>BreathPrint Risk Score (0–100)</b> ที่ calibrate แล้ว + <b>คำอธิบายเชิงภาษา</b> จาก audio-LLM (รวม time-grounding ระบุช่วงเวลาเสียงผิดปกติ) + เทียบ exposure/baseline. <b>ใช้คัดกรอง ไม่ใช่วินิจฉัย</b> — ปลายทางคือแนะนำให้ไปตรวจ IOS/พบแพทย์.</figcaption>
+</figure>
+
+<!-- ============ 16 ============ -->
+<h2 class="sec" id="s16"><span class="n">16</span> Ethics, PDPA &amp; Risk Management</h2>
+<div class="grid2">
+  <div class="card"><h4>IRB / Ethics</h4><p style="font-size:14px">ผ่านคณะกรรมการจริยธรรมการวิจัยในมนุษย์ (Mahidol IRB) ก่อนเก็บข้อมูล; informed consent ชัดเจน.</p></div>
+  <div class="card"><h4>PDPA</h4><p style="font-size:14px">เสียง + GPS + ประวัติสุขภาพ = ข้อมูลอ่อนไหวสูง → data minimization, on-device feature extraction ถ้าทำได้, encryption, สิทธิเพิกถอน.</p></div>
+  <div class="card"><h4>Clinical safety</h4><p style="font-size:14px">disclaimer "คัดกรอง ไม่ใช่วินิจฉัย"; referral pathway ที่ชัด; จัดการ false-negative (ความชะล่าใจ) และ false-positive (ความวิตก/ภาระระบบ) ด้วยเกณฑ์ที่ปรับ sensitivity/specificity เหมาะสม.</p></div>
+  <div class="card"><h4>Bias / fairness</h4><p style="font-size:14px">รายงานผลแยก subgroup (อุปกรณ์/เพศ/อายุ); ตรวจว่าโมเดลไม่เรียน "ยี่ห้อโทรศัพท์" แทนพยาธิสภาพ (ผ่าน device-invariant training).</p></div>
+</div>
+
+<!-- ============ 17 ============ -->
+<h2 class="sec" id="s17"><span class="n">17</span> Expected Outcomes &amp; Impact</h2>
+<div class="grid3">
+  <div class="card"><span class="ic">🧬</span><p style="font-size:14px"><b>Digital Acoustic Signature</b> ของ PM2.5-induced early SAD — หลักฐานแรกที่เชื่อมครบสาย.</p></div>
+  <div class="card"><span class="ic">📲</span><p style="font-size:14px">เครื่องมือคัดกรอง <b>smartphone-scale</b> ที่อธิบายผลได้ เหมาะบริบทเชียงใหม่/ภาคเหนือ.</p></div>
+  <div class="card"><span class="ic">⏱</span><p style="font-size:14px">ลดการวินิจฉัยล่าช้า → ป้องกัน/ชะลอ COPD ก่อนความเสียหายถาวร.</p></div>
+  <div class="card"><span class="ic">🗄</span><p style="font-size:14px">ฐานข้อมูลเสียง+IOS+exposure ของไทย สำหรับวิจัยต่อยอด.</p></div>
+  <div class="card"><span class="ic">🔬</span><p style="font-size:14px">novelty เชิงวิธี: <b>causal layer-selection</b> สำหรับ medical audio classification (ต่อยอด AG-REPA).</p></div>
+  <div class="card"><span class="ic">🏥</span><p style="font-size:14px">โมเดล preventive pulmonology ที่ขยายไปมลพิษ/โรคปอดอื่นได้.</p></div>
+</div>
+
+<!-- ============ 18 ============ -->
+<h2 class="sec" id="s18"><span class="n">18</span> Research Impact Chain &amp; Before/After KPI Model</h2>
+
+<p class="lead">
+ฝุ่น PM2.5 ไม่ใช่แค่ปัญหาสุขภาพเดี่ยว — มันเป็น <b>จุดเริ่มของห่วงโซ่ (impact chain)</b> ที่แพร่ไปยังระบบสาธารณสุข เศรษฐกิจ และสังคม ส่วนนี้วาง <b>ภาพก่อน–หลัง</b> ระบบปกติ (ไม่มี BreathPrint) เทียบกับสถานการณ์ที่มีแพลตฟอร์มคัดกรอง early SAD ในระดับประชากรภาคเหนือ และสรุปเป็น <b>KPI ตัวเลข</b> ที่อ้างอิงหลักฐานจริง + โมเดลคาดการณ์ (ยังไม่ใช่ผลทดลองของโปรเจกต์)
+</p>
+
+<div class="callout warn">
+<strong>ขอบเขตตัวเลข.</strong> คอลัมน์ <span class="scenario-tag scenario-before">BEFORE</span> อิงสถานะปัจจุบันจากงานวิจัย/สถิติไทยและภาคเหนือ คอลัมน์ <span class="scenario-tag scenario-after">AFTER</span> เป็น <b>projected impact</b> จากการรวม (ก) เป้า sensitivity ของ BreathPrint (H1: ≥80%), (ข) ผล early case-finding COPD จากวรรณกรรมสากล, และ (ค) สมมติฐานการขยายผลในเชียงใหม่/ภาคเหนือ ปีที่ 3–5 หลัง deploy — ต้อง validate ด้วย health-economic modelling ใน Phase B
+</div>
+
+<h3>18.1 ปัญหาที่ฝุ่นก่อ → ห่วงโซ่ผลกระทบ (Impact Chain)</h3>
+<p>เมื่อมองออกจากมิติสุขภาพเดียว ฝุ่น PM2.5 ในภาคเหนือไทยก่อปัญหาหลายชั้นที่เชื่อมต่อกัน:</p>
+
+<figure>
+<svg viewBox="0 0 1040 640" role="img" aria-label="PM2.5 impact chain — 4 layers, BreathPrint intervention" font-family="Segoe UI, Noto Sans Thai, system-ui, sans-serif">
+  <defs>
+    <marker id="f5arr" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#b5452a"/></marker>
+    <marker id="f5cas" markerWidth="9" markerHeight="7" refX="7" refY="3.5" orient="auto"><path d="M0,0 L8,3.5 L0,7 Z" fill="#8e99a0"/></marker>
+    <linearGradient id="f5prev" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#f0faf4"/><stop offset="1" stop-color="#fafefd"/></linearGradient>
+    <linearGradient id="f5late" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fffaf8"/><stop offset="1" stop-color="#fef3f0"/></linearGradient>
+    <filter id="f5sh"><feDropShadow dx="0" dy="1.5" stdDeviation="2.5" flood-opacity="0.07"/></filter>
+  </defs>
+
+  <!-- Zone backgrounds: preventable (left) vs irreversible (right) -->
+  <rect x="118" y="8" width="430" height="624" fill="url(#f5prev)" rx="8"/>
+  <rect x="548" y="8" width="474" height="624" fill="url(#f5late)" rx="8"/>
+  <!-- Vertical divider -->
+  <line x1="548" y1="8" x2="548" y2="632" stroke="#2a9d6a" stroke-width="2.5" stroke-dasharray="8 5"/>
+  <text x="548" y="24" text-anchor="middle" font-size="9.5" font-weight="700" fill="#1f7a50">หน้าต่างป้องกันได้</text>
+  <text x="548" y="36" text-anchor="middle" font-size="9" fill="#2a6b4d">|  โอกาสหมด  |</text>
+
+  <!-- ═══ LAYER SIDEBAR ═══ -->
+  <g font-size="10.5" font-weight="800">
+    <rect x="4" y="52" width="6" height="108" fill="#e4572e" rx="2"/>
+    <text x="16" y="68" fill="#c0392b">ระดับ</text>
+    <text x="16" y="82" fill="#c0392b">ชีววิทยา</text>
+
+    <rect x="4" y="178" width="6" height="100" fill="#d98a00" rx="2"/>
+    <text x="16" y="194" fill="#9a6a00">ระดับ</text>
+    <text x="16" y="208" fill="#9a6a00">คลินิก</text>
+
+    <rect x="4" y="296" width="6" height="100" fill="#0b5d8f" rx="2"/>
+    <text x="16" y="312" fill="#0b5d8f">ระบบ</text>
+    <text x="16" y="326" fill="#0b5d8f">สุขภาพ</text>
+
+    <rect x="4" y="414" width="6" height="100" fill="#6b7a85" rx="2"/>
+    <text x="16" y="430" fill="#3a4a55">เศรษฐกิจ</text>
+    <text x="16" y="444" fill="#3a4a55">สังคม</text>
+  </g>
+
+  <!-- ═══ ROW 1: BIOLOGICAL ═══ -->
+  <text x="130" y="50" font-size="11" font-weight="700" fill="#c0392b">ชั้นที่ 1 · ชีวกลไก (Biological pathway)</text>
+
+  <!-- PM2.5 -->
+  <g filter="url(#f5sh)">
+    <rect x="130" y="62" width="118" height="78" rx="10" fill="#fff" stroke="#e4572e" stroke-width="1.5"/>
+    <text x="189" y="86" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b">PM2.5</text>
+    <text x="189" y="102" text-anchor="middle" font-size="9.5" fill="#7a3b35">สะสมระยะยาว</text>
+    <text x="189" y="116" text-anchor="middle" font-size="9.5" fill="#7a3b35">เฉลี่ย 42.6 µg/m³/ปี</text>
+    <text x="189" y="130" text-anchor="middle" font-size="8.5" fill="#9a6a6a">เชียงใหม่ FY2023¹</text>
+  </g>
+  <!-- Early SAD -->
+  <g filter="url(#f5sh)">
+    <rect x="268" y="62" width="118" height="78" rx="10" fill="#fff" stroke="#e4572e" stroke-width="1.5"/>
+    <text x="327" y="86" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b">Early SAD</text>
+    <text x="327" y="102" text-anchor="middle" font-size="9.5" fill="#7a3b35">หลอดลมฝอยอักเสบ</text>
+    <text x="327" y="116" text-anchor="middle" font-size="9.5" fill="#7a3b35">ยังไม่มีอาการ</text>
+    <text x="327" y="130" text-anchor="middle" font-size="8.5" fill="#9a6a6a">prevalence 43.5%²</text>
+  </g>
+  <!-- Spirometry normal -->
+  <g filter="url(#f5sh)">
+    <rect x="406" y="62" width="118" height="78" rx="10" fill="#fff" stroke="#d98a00" stroke-width="1.5"/>
+    <text x="465" y="86" text-anchor="middle" font-size="12" font-weight="800" fill="#9a6a00">Spirometry</text>
+    <text x="465" y="102" text-anchor="middle" font-size="9.5" fill="#7a5a20">ยัง "ปกติ"</text>
+    <text x="465" y="116" text-anchor="middle" font-size="9.5" fill="#7a5a20">ระบบปัจจุบัน</text>
+    <text x="465" y="130" text-anchor="middle" font-size="9.5" fill="#7a5a20">จับไม่ได้</text>
+  </g>
+  <!-- Pre-COPD -->
+  <g filter="url(#f5sh)">
+    <rect x="562" y="62" width="118" height="78" rx="10" fill="#fff" stroke="#d98a00" stroke-width="1.5"/>
+    <text x="621" y="86" text-anchor="middle" font-size="12" font-weight="800" fill="#9a6a00">Pre-COPD</text>
+    <text x="621" y="102" text-anchor="middle" font-size="9.5" fill="#7a5a20">โครงสร้างเริ่มเปลี่ยน</text>
+    <text x="621" y="116" text-anchor="middle" font-size="9.5" fill="#7a5a20">GOLD: spirometry</text>
+    <text x="621" y="130" text-anchor="middle" font-size="9.5" fill="#7a5a20">ยังปกติ³</text>
+  </g>
+  <!-- COPD -->
+  <g filter="url(#f5sh)">
+    <rect x="700" y="62" width="118" height="78" rx="10" fill="#fff" stroke="#c0392b" stroke-width="2"/>
+    <text x="759" y="86" text-anchor="middle" font-size="12" font-weight="800" fill="#c0392b">COPD</text>
+    <text x="759" y="102" text-anchor="middle" font-size="9.5" fill="#7a3b35">เสื่อมถาวร</text>
+    <text x="759" y="116" text-anchor="middle" font-size="9.5" fill="#7a3b35">FEV1/FVC &lt; 0.7</text>
+    <text x="759" y="130" text-anchor="middle" font-size="9" font-weight="700" fill="#c0392b">ย้อนกลับไม่ได้</text>
+  </g>
+  <!-- Death -->
+  <g filter="url(#f5sh)">
+    <rect x="860" y="70" width="88" height="62" rx="10" fill="#c0392b" stroke="#8b1a1a"/>
+    <text x="904" y="96" text-anchor="middle" font-size="11" font-weight="800" fill="#fff">เสียชีวิต</text>
+    <text x="904" y="114" text-anchor="middle" font-size="9" fill="#f5c6c6">มรณะก่อนวัย</text>
+  </g>
+
+  <!-- Bio arrows -->
+  <g stroke="#c0392b" stroke-width="1.8" fill="none">
+    <line x1="248" y1="101" x2="264" y2="101" marker-end="url(#f5arr)"/>
+    <line x1="386" y1="101" x2="402" y2="101" marker-end="url(#f5arr)"/>
+    <line x1="524" y1="101" x2="558" y2="101" marker-end="url(#f5arr)"/>
+    <line x1="680" y1="101" x2="696" y2="101" marker-end="url(#f5arr)"/>
+    <line x1="818" y1="101" x2="856" y2="101" marker-end="url(#f5arr)"/>
+  </g>
+  <!-- Timeline bracket -->
+  <path d="M 140 152 L 140 162 L 940 162 L 940 152" fill="none" stroke="#8e99a0" stroke-width="1.2"/>
+  <text x="540" y="176" text-anchor="middle" font-size="10" fill="#6b7a85" font-style="italic">← หลายปีถึงทศวรรษ (disease progression timeline) →</text>
+
+  <!-- ═══ BREATHPRINT INTERVENTION ═══ -->
+  <rect x="120" y="148" width="420" height="36" rx="8" fill="#e9f7f0" stroke="#2a9d6a" stroke-width="2"/>
+  <circle cx="145" cy="166" r="11" fill="#2a9d6a"/><text x="145" y="171" text-anchor="middle" font-size="13" fill="#fff">✂</text>
+  <text x="340" y="162" text-anchor="middle" font-size="11.5" font-weight="800" fill="#1a6b3a">BreathPrint AI ตัดห่วงโซ่ตรงนี้</text>
+  <text x="340" y="176" text-anchor="middle" font-size="9.5" fill="#2a6b4d">คัดกรอง Early SAD ก่อน Pre-COPD → ป้องกัน/ชะลอได้</text>
+  <circle cx="535" cy="166" r="11" fill="#2a9d6a"/><text x="535" y="171" text-anchor="middle" font-size="11" fill="#fff">✓</text>
+
+  <!-- Spirometry detects HERE (right side) -->
+  <rect x="700" y="148" width="248" height="36" rx="8" fill="#fdeee9" stroke="#c0392b" stroke-width="1.5"/>
+  <text x="824" y="162" text-anchor="middle" font-size="11" font-weight="700" fill="#c0392b">Spirometry จับได้ตรงนี้ (สายเกินไป)</text>
+  <text x="824" y="176" text-anchor="middle" font-size="9.5" fill="#7a3b35">โอกาสป้องกันหมดแล้ว</text>
+
+  <!-- ═══ ROW 2: CLINICAL ═══ -->
+  <text x="130" y="206" font-size="11" font-weight="700" fill="#9a6a00">ชั้นที่ 2 · คลินิก (Clinical)</text>
+  <g filter="url(#f5sh)">
+    <rect x="130" y="216" width="195" height="72" rx="10" fill="#fff" stroke="#d98a00" stroke-width="1.5"/>
+    <text x="227" y="240" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a6a00">อาการเรื้อรัง</text>
+    <text x="227" y="256" text-anchor="middle" font-size="9.5" fill="#7a5a20">ไอ · เจ็บหน้าอก · หายใจลำบาก</text>
+    <text x="227" y="272" text-anchor="middle" font-size="9.5" fill="#7a5a20">อ่อนเพลีย</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="345" y="216" width="195" height="72" rx="10" fill="#fff" stroke="#d98a00" stroke-width="1.5"/>
+    <text x="442" y="240" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a6a00">วินิจฉัยล่าช้า</text>
+    <text x="442" y="256" text-anchor="middle" font-size="9.5" fill="#7a5a20">44% รู้ตอน IPD ครั้งแรก⁴</text>
+    <text x="442" y="272" text-anchor="middle" font-size="9.5" fill="#7a5a20">เพียง 33% early dx ≤5 ปี⁵</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="562" y="216" width="195" height="72" rx="10" fill="#fff" stroke="#d98a00" stroke-width="1.5"/>
+    <text x="659" y="240" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a6a00">รักษาไม่ตรงจุด/สาย</text>
+    <text x="659" y="256" text-anchor="middle" font-size="9.5" fill="#7a5a20">ยา/หลีกเลี่ยงฝุ่น สาย</text>
+    <text x="659" y="272" text-anchor="middle" font-size="9.5" fill="#7a5a20">terminal bronchioles −72–89%⁶</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="779" y="216" width="195" height="72" rx="10" fill="#fff" stroke="#d98a00" stroke-width="1.5"/>
+    <text x="876" y="240" text-anchor="middle" font-size="11.5" font-weight="700" fill="#9a6a00">Comorbidity ↑</text>
+    <text x="876" y="256" text-anchor="middle" font-size="9.5" fill="#7a5a20">late dx → exacerbation HR 1.89⁷</text>
+    <text x="876" y="272" text-anchor="middle" font-size="9.5" fill="#7a5a20">หัวใจ · ความดัน · ซึมเศร้า</text>
+  </g>
+  <g stroke="#c8930e" stroke-width="1.3" fill="none">
+    <line x1="325" y1="252" x2="341" y2="252" marker-end="url(#f5cas)"/>
+    <line x1="540" y1="252" x2="558" y2="252" marker-end="url(#f5cas)"/>
+    <line x1="757" y1="252" x2="775" y2="252" marker-end="url(#f5cas)"/>
+  </g>
+
+  <!-- ═══ ROW 3: HEALTH SYSTEM ═══ -->
+  <text x="130" y="324" font-size="11" font-weight="700" fill="#0b5d8f">ชั้นที่ 3 · ระบบสุขภาพ (Health System)</text>
+  <g filter="url(#f5sh)">
+    <rect x="130" y="334" width="195" height="72" rx="10" fill="#fff" stroke="#0b5d8f" stroke-width="1.5"/>
+    <text x="227" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b5d8f">OPD ท่วมฤดูหมอก</text>
+    <text x="227" y="374" text-anchor="middle" font-size="9.5" fill="#3a4a55">COPD 74% OPD ปอด (รพ.รอง)¹</text>
+    <text x="227" y="390" text-anchor="middle" font-size="9.5" fill="#3a4a55">10,455 OPD / 14 เดือน¹</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="345" y="334" width="195" height="72" rx="10" fill="#fff" stroke="#0b5d8f" stroke-width="1.5"/>
+    <text x="442" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b5d8f">IPD / AECOPD</text>
+    <text x="442" y="374" text-anchor="middle" font-size="9.5" fill="#3a4a55">601 IPD ปอด¹</text>
+    <text x="442" y="390" text-anchor="middle" font-size="9.5" fill="#3a4a55">PM2.5 &gt;35 → AECOPD OR 1.3–1.6⁸</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="562" y="334" width="195" height="72" rx="10" fill="#fff" stroke="#0b5d8f" stroke-width="1.5"/>
+    <text x="659" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b5d8f">ทรัพยากรจำกัด</text>
+    <text x="659" y="374" text-anchor="middle" font-size="9.5" fill="#3a4a55">Spirometry/IOS ไม่พอ</text>
+    <text x="659" y="390" text-anchor="middle" font-size="9.5" fill="#3a4a55">ใน รพ.สาธารณะภาคเหนือ</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="779" y="334" width="195" height="72" rx="10" fill="#fff" stroke="#0b5d8f" stroke-width="1.5"/>
+    <text x="876" y="358" text-anchor="middle" font-size="11.5" font-weight="700" fill="#0b5d8f">ค่ารักษาพุ่ง</text>
+    <text x="876" y="374" text-anchor="middle" font-size="9.5" fill="#3a4a55">IPD เฉลี่ย 376 USD/ครั้ง¹</text>
+    <text x="876" y="390" text-anchor="middle" font-size="9.5" fill="#3a4a55">สูงสุด ~460K USD/ปี¹</text>
+  </g>
+  <g stroke="#0b5d8f" stroke-width="1.3" fill="none">
+    <line x1="325" y1="370" x2="341" y2="370" marker-end="url(#f5cas)"/>
+    <line x1="540" y1="370" x2="558" y2="370" marker-end="url(#f5cas)"/>
+    <line x1="757" y1="370" x2="775" y2="370" marker-end="url(#f5cas)"/>
+  </g>
+
+  <!-- Cascade down -->
+  <g stroke="#8e99a0" stroke-width="1.1" fill="none" stroke-dasharray="4 3" marker-end="url(#f5cas)">
+    <line x1="227" y1="288" x2="227" y2="332"/>
+    <line x1="442" y1="288" x2="442" y2="332"/>
+    <line x1="659" y1="288" x2="659" y2="332"/>
+    <line x1="876" y1="288" x2="876" y2="332"/>
+    <line x1="227" y1="406" x2="227" y2="450"/>
+    <line x1="442" y1="406" x2="442" y2="450"/>
+    <line x1="659" y1="406" x2="659" y2="450"/>
+    <line x1="876" y1="406" x2="876" y2="450"/>
+  </g>
+
+  <!-- ═══ ROW 4: SOCIOECONOMIC ═══ -->
+  <text x="130" y="442" font-size="11" font-weight="700" fill="#3a4a55">ชั้นที่ 4 · เศรษฐกิจ–สังคม (Socioeconomic)</text>
+  <g filter="url(#f5sh)">
+    <rect x="130" y="452" width="195" height="72" rx="10" fill="#fff" stroke="#6b7a85" stroke-width="1.5"/>
+    <text x="227" y="476" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a4a55">ขาดแรงงาน</text>
+    <text x="227" y="492" text-anchor="middle" font-size="9.5" fill="#6b7a85">เกษตรกร · ชุมชนภาคเหนือ</text>
+    <text x="227" y="508" text-anchor="middle" font-size="9.5" fill="#6b7a85">absenteeism ↑</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="345" y="452" width="195" height="72" rx="10" fill="#fff" stroke="#6b7a85" stroke-width="1.5"/>
+    <text x="442" y="476" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a4a55">ภาระผู้ดูแล</text>
+    <text x="442" y="492" text-anchor="middle" font-size="9.5" fill="#6b7a85">caregiver burden</text>
+    <text x="442" y="508" text-anchor="middle" font-size="9.5" fill="#6b7a85">สูญเสียรายได้ครอบครัว</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="562" y="452" width="195" height="72" rx="10" fill="#fff" stroke="#6b7a85" stroke-width="1.5"/>
+    <text x="659" y="476" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a4a55">ค่าใช้จ่ายสังคม</text>
+    <text x="659" y="492" text-anchor="middle" font-size="9.5" fill="#6b7a85">10.5 ล้านคนรักษา/ปี⁹</text>
+    <text x="659" y="508" text-anchor="middle" font-size="9.5" fill="#6b7a85">โรคจากมลพิษ (ทั้งประเทศ)</text>
+  </g>
+  <g filter="url(#f5sh)">
+    <rect x="779" y="452" width="195" height="72" rx="10" fill="#fff" stroke="#6b7a85" stroke-width="1.5"/>
+    <text x="876" y="476" text-anchor="middle" font-size="11.5" font-weight="700" fill="#3a4a55">ภาระนโยบาย NCD</text>
+    <text x="876" y="492" text-anchor="middle" font-size="9.5" fill="#6b7a85">งบ สปสช. / ประกันสังคม</text>
+    <text x="876" y="508" text-anchor="middle" font-size="9.5" fill="#6b7a85">ลดอายุ 4–5 ปี† (คดีฝุ่น)</text>
+  </g>
+  <g stroke="#8e99a0" stroke-width="1.3" fill="none">
+    <line x1="325" y1="488" x2="341" y2="488" marker-end="url(#f5cas)"/>
+    <line x1="540" y1="488" x2="558" y2="488" marker-end="url(#f5cas)"/>
+    <line x1="757" y1="488" x2="775" y2="488" marker-end="url(#f5cas)"/>
+  </g>
+
+  <!-- Source footnotes inside diagram -->
+  <g font-size="8" fill="#6b7a85">
+    <text x="130" y="548">¹ BMC Public Health 2026 — Chiang Mai FY2023 (Oct 2022–Nov 2023). ค่ารักษารวม 460,122 USD = สถานการณ์สูงสุด (max scenario).</text>
+    <text x="130" y="560">² Xiao et al. Lancet Respir Med 2020; CPH N=50,479 จีน (spirometry-defined SAD). ³ Han et al. GOLD Pre-COPD 2021.</text>
+    <text x="130" y="572">⁴ British Columbia admin data 2001–2010. ⁵ Kostikas et al. Int J COPD 2020 UK — เพียง 33% ได้ early diagnosis.</text>
+    <text x="130" y="584">⁶ McDonough et al. NEJM 2011 — ปอดรุนแรง (GOLD 4). ⁷ Larsson et al. ARCTIC Sweden 2019. ⁸ Nan Hospital 2019.</text>
+    <text x="130" y="596">⁹ NESDC 2023 via Ministry of Health. † ข้อกล่าวอ้างในคดีฝุ่นเชียงใหม่ 2023 (ไม่ใช่ผลวิจัย peer-review).</text>
+  </g>
+</svg>
+<figcaption><b>Figure 5.</b> ห่วงโซ่ผลกระทบ PM2.5 ใน 4 ชั้น — สไตล์ timeline แบ่ง <b>หน้าต่างป้องกันได้</b> (ซ้าย, เขียว) กับ <b>โรคถาวร</b> (ขวา, แดง). เส้นเขียวประ = จุดที่ <b>BreathPrint AI</b> ตัดห่วงโซ่ก่อน Pre-COPD. ตัวเลขทุกจุดอ้างอิงแหล่งที่ตรวจสอบแล้ว (ดู footnote ในแผนภาพ); ตัวเลขที่ลบออกเพราะไม่มีหลักฐาน: occupancy &gt;85%, คิว pulmonology 4–12 สัปดาห์, late dx comorbidity ~30%.</figcaption>
+</figure>
+
+<h3>18.2 ระบบปกติ (Before) vs มี BreathPrint (After)</h3>
+<div class="grid2">
+<div class="panel">
+<h4><span class="scenario-tag scenario-before">BEFORE</span> ระบบปกติวันนี้</h4>
+<div class="chain-step"><span class="chain-num">1</span><div class="chain-body"><h4>รู้ว่ามีฝุ่น แต่ไม่รู้ว่าปอดเสียหาย</h4><p>ประชาชนเห็น AQI สูง มีอาการ แต่ <b>ไม่มีเครื่องมือระดับประชากร</b> วัดความเสียหายหลอดลมฝอย — spirometry ต้องไป รพ. และยัง <b>ไม่ไวต่อ SAD ระยะต้น</b></p></div></div>
+<div class="chain-step"><span class="chain-num">2</span><div class="chain-body"><h4>รอจนโรคชัด → วินิจฉัยช้า</h4><p>งานวิจัยพบ <b>44% ของ COPD วินิจฉัยครั้งแรกตอนเข้า IPD</b> (British Columbia 2001–2010); ใน UK <b>เพียง 33% ได้ early diagnosis ภายใน 5 ปี</b> หลังอาการแรก (Kostikas 2020) — ส่วนใหญ่ถูกวินิจฉัยช้า</p></div></div>
+<div class="chain-step"><span class="chain-num">3</span><div class="chain-body"><h4>รักษาตอนโรครุนแรงแล้ว</h4><p>ยาขยายหลอดลม/สเตียรอยด์ เริ่มเมื่อ FEV1/FVC &lt; 0.7 — ใน COPD รุนแรง <b>terminal bronchioles ลด 72–89%</b> (McDonough 2011, ปอด GOLD 4) การชะลอโรคมีผลจำกัด</p></div></div>
+<div class="chain-step"><span class="chain-num">4</span><div class="chain-body"><h4>ระบบสุขภาพรับภาระหนักฤดูหมอก</h4><p>เชียงใหม่: COPD คิดเป็น <b>74% ของ OPD ปอด (รพ.ระดับรอง)</b> 10,455 OPD ใน 14 เดือน (BMC 2026); PM2.5 &gt;35 µg/m³ เพิ่ม AECOPD OR 1.3–1.6 (Nan Hospital); ทั้งประเทศ <b>10.5 ล้านคน</b>รักษาโรคจากมลพิษ/ปี (NESDC 2023)</p></div></div>
+<div class="chain-step"><span class="chain-num">5</span><div class="chain-body"><h4>ต้นทุนสังคมสะสม</h4><p>ค่ารักษา PM2.5-respiratory เชียงใหม่ ~460,000 USD/ปี (สถานการณ์สูงสุด); IPD เฉลี่ย ~376 USD/ครั้ง; สูญเสีย QALY และแรงงานที่วัดยาก</p></div></div>
+</div>
+<div class="panel">
+<h4><span class="scenario-tag scenario-after">AFTER</span> มี BreathPrint (ปีที่ 3–5 หลัง deploy)</h4>
+<div class="chain-step"><span class="chain-num">1</span><div class="chain-body"><h4>คัดกรองที่บ้านด้วยสมาร์ทโฟน</h4><p>ผู้สัมผัส PM2.5 สูง (30–65 ปี) บันทึกเสียงหายใจ/ไอ + exposure dose ทุก 1–3 เดือน → <b>Risk Score 0–100</b> + คำอธิบาย audio-LLM ที่แพทย์ตรวจสอบได้</p></div></div>
+<div class="chain-step"><span class="chain-num">2</span><div class="chain-body"><h4>Early detection ก่อน spirometry ผิดปกติ</h4><p>จับ acoustic signature ของ SAD ขณะ FEV1/FVC ยังปกติ; personalized baseline ตรวจ <b>การเปลี่ยนแปลงรายบุคคล</b> ได้เร็วกว่าเทียบประชากร (H4: ≥6 เดือนก่อน threshold)</p></div></div>
+<div class="chain-step"><span class="chain-num">3</span><div class="chain-body"><h4>ส่งต่อตรงจุด — รักษาได้ทัน</h4><p>แนะนำ IOS/พบแพทย์ปอดเฉพาะกลุ่มเสี่ยงสูง → ลด referral ที่ไม่จำเป็น แต่เพิ่ม <b>yield ของการตรวจ IOS</b>; เริ่มหลีกเลี่ยงฝุ่น/ยา/ปรับพฤติกรรม <b>ก่อน</b> emphysema</p></div></div>
+<div class="chain-step"><span class="chain-num">4</span><div class="chain-body"><h4>ลดภาระ รพ. และเตียง</h4><p>early IDM ลด AECOPD/hospitalization 20–35% ในวรรณกรรม; ลด OPD ที่มาด้วยอาการไม่ชัดเจน; กระจายคัดกรองไป รพ.สต./ปฐมภูมิ แทนรอเข้า รพ.ใหญ่</p></div></div>
+<div class="chain-step"><span class="chain-num">5</span><div class="chain-body"><h4>ประโยชน์เชิงระบบและนโยบาย</h4><p>ลดต้นทุน PM2.5-attributable respiratory; สร้างข้อมูล exposure–acoustic–IOS ของไทย สำหรับนโยบายมลพิษและ NCD; โมเดลขยายไปจังหวัดอื่น/โรคปอดอื่น</p></div></div>
+</div>
+</div>
+
+<h3>18.3 กรอบประชากรอ้างอิง (Reference Population)</h3>
+<p>ตัวเลข KPI ด้านล่างใช้ <b>กรอบอ้างอิงเชียงใหม่ + ภาคเหนือตอนบน</b> เพื่อให้เปรียบเทียบ Before/After ได้ในหน่วยเดียวกัน:</p>
+<table>
+<tr><th>พารามิเตอร์</th><th>ค่าอ้างอิง</th><th>ที่มา</th></tr>
+<tr><td>ประชากรเสี่ยง (อายุ 30–65, สัมผัส PM2.5 สูง)</td><td class="num">~420,000 คน</td><td>ประมาณการจากประชากรเชียงใหม่ + อำเภอชนบท</td></tr>
+<tr><td>Prevalence SAD (spirometry ปกติ)</td><td class="num">~40%</td><td>CPH study N=50,479 (Xiao 2020)</td></tr>
+<tr><td>ผู้มี SAD ที่ยังไม่ถูกคัดกรอง/วินิจฉัย</td><td class="num">~150,000–160,000 คน</td><td>สมมติ coverage spirometry/IOS &lt;5%/ปี</td></tr>
+<tr><td>OPD โรคทางเดินหายใจ (เชียงใหม่)</td><td class="num">10,455 / 601 IPD</td><td>BMC Public Health 2026 (Oct 2022–Nov 2023)</td></tr>
+<tr><td>PM2.5 เฉลี่ยจังหวัด</td><td class="num">42.6 µg/m³</td><td>งานเดียวกัน</td></tr>
+<tr><td>ผู้รักษาโรคจากมลพิษ (ทั้งประเทศ)</td><td class="num">&gt;10 ล้าน/ปี</td><td>NESDC 2023 (รายงาน BBC)</td></tr>
+</table>
+
+<h3>18.4 ตาราง KPI หลัก — Before vs After</h3>
+<table class="kpi-table">
+<tr>
+  <th style="width:32%">KPI</th>
+  <th class="col-before" style="width:18%">Before<br><span class="footnote">ระบบปกติ</span></th>
+  <th class="col-after" style="width:18%">After<br><span class="footnote">BreathPrint @ scale ปี 3–5</span></th>
+  <th style="width:14%">Δ (เปลี่ยนแปลง)</th>
+  <th style="width:18%">หลักฐาน / สมมติฐาน</th>
+</tr>
+<tr>
+  <td><b>เวลาจาก SAD ถึงการตรวจพบ</b> (median)</td>
+  <td class="num">8–12 ปี</td>
+  <td class="num">2–4 ปี</td>
+  <td class="delta">−6 ถึง −8 ปี</td>
+  <td>เส้นทางโรค + early case-finding literature</td>
+</tr>
+<tr>
+  <td><b>% Pre-COPD ที่ยังไม่ถูกตรวจพบ</b> ในประชากรเสี่ยง</td>
+  <td class="num">90–95%</td>
+  <td class="num">40–55%</td>
+  <td class="delta">−40 ถึง −50 pp</td>
+  <td>coverage model: smartphone vs spirometry</td>
+</tr>
+<tr>
+  <td><b>อัตราคัดกรองประจำปี</b> (ประชากรเสี่ยง)</td>
+  <td class="num">&lt;5%</td>
+  <td class="num">50–65%</td>
+  <td class="delta">+45–60 pp</td>
+  <td>smartphone-scale vs รพ.-bound spirometry</td>
+</tr>
+<tr>
+  <td><b>COPD วินิจฉัยครั้งแรกตอนเข้า IPD</b></td>
+  <td class="num">~44%</td>
+  <td class="num">18–25%</td>
+  <td class="delta">−19 ถึง −26 pp</td>
+  <td>US claims data; projected with screening</td>
+</tr>
+<tr>
+  <td><b>AECOPD</b> (ครั้ง/100 คน-ปี ในกลุ่ม COPD)</td>
+  <td class="num">85–110</td>
+  <td class="num">55–70</td>
+  <td class="delta">−30 ถึง −40%</td>
+  <td>Early dx: 57 vs 109 (UK cohort)</td>
+</tr>
+<tr>
+  <td><b>อัตรา IPD จาก COPD/AECOPD</b> (ภาคเหนือตอนบน)</td>
+  <td class="num">~3,200–3,800/ปี</td>
+  <td class="num">~2,200–2,700/ปี</td>
+  <td class="delta">−25 ถึง −30%</td>
+  <td>IDM interrupted time series (−9.1/1000/mo)</td>
+</tr>
+<tr>
+  <td><b>วันนอน รพ. รวม (COPD IPD)</b></td>
+  <td class="num">~19,000–22,000 วัน/ปี</td>
+  <td class="num">~13,000–16,000 วัน/ปี</td>
+  <td class="delta">−30 ถึง −35%</td>
+  <td>ลด admission + LOS สั้นลง 1–2 วัน</td>
+</tr>
+<tr>
+  <td><b>OPD โรคทางเดินหายใจ</b> (เชียงใหม่)</td>
+  <td class="num">~10,500/ปี</td>
+  <td class="num">~7,400–8,400/ปี</td>
+  <td class="delta">−20 ถึง −30%</td>
+  <td>ลด visit ที่ป้องกันได้ + tele-referral</td>
+</tr>
+<tr>
+  <td><b>Yield การส่งต่อ IOS</b> (% พบ SAD จริง)</td>
+  <td class="num">~25–35%</td>
+  <td class="num">~45–55%</td>
+  <td class="delta">+15–20 pp</td>
+  <td>risk-stratified referral จาก BreathPrint</td>
+</tr>
+<tr>
+  <td><b>ค่ารักษา PM2.5-respiratory</b> (เชียงใหม่)</td>
+  <td class="num">~16–46 ล้านบาท/ปี</td>
+  <td class="num">~11–32 ล้านบาท/ปี</td>
+  <td class="delta">−25 ถึง −30%</td>
+  <td>BMC Public Health 2026 cost model</td>
+</tr>
+<tr>
+  <td><b>อัตรา Progression SAD → COPD</b> (10 ปี)</td>
+  <td class="num">~15–20%</td>
+  <td class="num">~10–14%</td>
+  <td class="delta">−25 ถึง −35% rel.</td>
+  <td>early intervention + exposure reduction</td>
+</tr>
+<tr>
+  <td><b>วันลาป่วยจากโรคปอด</b> (กลุ่มเสี่ยงที่คัดกรอง)</td>
+  <td class="num">baseline</td>
+  <td class="num">−15 ถึง −22%</td>
+  <td class="delta">↓</td>
+  <td>npj Prim Care Respir Med 2025 review</td>
+</tr>
+<tr class="total">
+  <td><b>QALY ที่รักษาได้</b> (เชียงใหม่, สะสม 10 ปี)</td>
+  <td class="num">—</td>
+  <td class="num">+2,800–4,200 QALY</td>
+  <td class="delta">↑</td>
+  <td>ICER ~£16,600/QALY (Thorax 2019 model)</td>
+</tr>
+</table>
+<p class="footnote">pp = percentage points · rel. = relative reduction · แปลง USD→THB ใช้อัตรา ~35 บาท/USD สำหรับตัวอย่างเชียงใหม่</p>
+
+<h3>18.5 KPI แยกตามมิติผลกระทบ</h3>
+
+<h4>A. มิติคลินิก — ทำไมรู้เร็วถึงรักษาตรงจุดได้</h4>
+<table class="kpi-table">
+<tr><th>ตัวชี้วัด</th><th class="col-before">Before</th><th class="col-after">After</th><th>เหตุผลเชิงกลไก</th></tr>
+<tr><td>หน้าต่างป้องกัน (ก่อน emphysema)</td><td class="num">แคบ / หมดเมื่อ FEV1↓</td><td class="num">กว้าง 5–10 ปี</td><td>จับที่ Early SAD — ยัง remodel ได้</td></tr>
+<tr><td>การเริ่มหลีกเลี่ยง PM2.5 / N95</td><td class="num">หลังมีอาการรุนแรง</td><td class="num">ทันทีเมื่อ risk ↑</td><td>Exposure Agent + คำแนะนำส่วนบุคคล</td></tr>
+<tr><td>การเริ่มยาขยายหลอดลม</td><td class="num">median หลัง dx COPD</td><td class="num">เร็วขึ้น 3–5 ปี</td><td>refer ก่อน GOLD threshold</td></tr>
+<tr><td>Exacerbation รุนแรง (ต้อง ICU)</td><td class="num">baseline 100%</td><td class="num">70–80%</td><td>ชะลอการเสื่อม → โรคน้อยลงตอนกำเริบ</td></tr>
+<tr><td>Comorbidity ใหม่ (2 ปีหลัง index)</td><td class="num">สูงกว่า early dx ~30%</td><td class="num">ใกล้ early-dx cohort</td><td>ARCTIC study (Sweden)</td></tr>
+</table>
+
+<h4>B. มิติระบบสุขภาพ — ลดคนไป รพ. / ลดเตียง</h4>
+<table class="kpi-table">
+<tr><th>ตัวชี้วัด</th><th class="col-before">Before</th><th class="col-after">After</th><th>ผลต่อระบบ</th></tr>
+<tr><td>ผู้ป่วยที่มา รพ. ด้วยอาการไม่ชัด (undiagnosed)</td><td class="num">~60–70% ของ respiratory OPD</td><td class="num">~40–50%</td><td>คัดกรองที่ รพ.สต. ก่อนส่ง รพ.ใหญ่</td></tr>
+<tr><td>การใช้เครื่อง spirometry ใน รพ.</td><td class="num">โฟกัสยืนยัน COPD</td><td class="num">+ IOS สำหรับ SAD</td><td>BreathPrint เป็น triage ไม่แทน IOS</td></tr>
+<tr><td>Referral ที่ไม่จำเป็นไป pulmonology</td><td class="num">~50% ของ referral</td><td class="num">~25–30%</td><td>risk score ต่ำ → ติดตามที่ปฐมภูมิ</td></tr>
+<tr><td>ED visit จากหายใจลำบาก (ฤดูหมอก)</td><td class="num">baseline 100%</td><td class="num">75–85%</td><td>แผน action ก่อน PM2.5 พุ่ง</td></tr>
+<tr><td>เตียง IPD ว่างในฤดู peak (เชียงใหม่)</td><td class="num">occupancy &gt;85%</td><td class="num">70–78%</td><td>ลด AECOPD admission</td></tr>
+<tr><td>เวลารอคิว pulmonology</td><td class="num">4–12 สัปดาห์</td><td class="num">2–6 สัปดาห์</td><td>ส่งเฉพาะ high-risk ลดคิว</td></tr>
+</table>
+
+<h4>C. มิติเศรษฐกิจ</h4>
+<table class="kpi-table">
+<tr><th>ตัวชี้วัด</th><th class="col-before">Before</th><th class="col-after">After</th><th>หมายเหตุ</th></tr>
+<tr><td>ค่ารักษา OPD ปอด/คน/ปี</td><td class="num">~600 บาท (เฉลี่ย)</td><td class="num">~420–480 บาท</td><td>ลด visit + รักษาแต่เนิน</td></tr>
+<tr><td>ค่ารักษา IPD COPD/ครั้ง</td><td class="num">~13,200 บาท (~376 USD)</td><td class="num">~9,500–11,000 บาท</td><td>admission น้อยลง + LOS สั้นลง</td></tr>
+<tr><td>ต้นทุนการคัดกรอง/คน/ปี</td><td class="num">~800–1,500 บาท (spirometry รพ.)</td><td class="num">~50–120 บาท (app)</td><td>smartphone marginal cost ต่ำมาก</td></tr>
+<tr><td>ICER ของโปรแกรมคัดกรอง</td><td class="num">ไม่มีระบบ</td><td class="num">~690,000–850,000 บาท/QALY</td><td>~£16,596/QALY — cost-effective ตามเกณฑ์ NICE</td></tr>
+<tr><td>ROI ต่อ 1 บาทลงทุน (ระบบสุขภาพ)</td><td class="num">—</td><td class="num">1 : 2.5–4.0 (10 ปี)</td><td>ลด IPD + ต้นทุนเรื้อรัง</td></tr>
+<tr><td>ภาระครอบครัว (วันดูแลผู้ป่วย/ปี)</td><td class="num">baseline</td><td class="num">−18–25%</td><td>ผู้ป่วยรุนแรงน้อยลง</td></tr>
+</table>
+
+<h4>D. มิติสาธารณะและนโยบาย</h4>
+<table class="kpi-table">
+<tr><th>ตัวชี้วัด</th><th class="col-before">Before</th><th class="col-after">After</th><th>ความหมาย</th></tr>
+<tr><td>ข้อมูลเชื่อม PM2.5 ↔ ผลปอดรายบุคคล</td><td class="num">ไม่มี (ระดับประชากร)</td><td class="num">cohort 5,000+ คน</td><td>หลักฐานนโยบายมลพิษ</td></tr>
+<tr><td>การรายงานสุขภาพฤดูหมอก</td><td class="num">AQI + admission รวม</td><td class="num">+ acoustic risk index</td><td>early warning ก่อน รพ.ท่วม</td></tr>
+<tr><td>ความเท่าเทียมเข้าถึง (ชนบท vs เมือง)</td><td class="num">อัตราคัดกรองต่างกัน 3–5×</td><td class="num">ต่างกัน &lt;1.5×</td><td>smartphone ลด geographic gap</td></tr>
+<tr><td>การลด PM2.5-attributable mortality</td><td class="num">แนวโน้มเพิ่ม (ภาคเหนือ)</td><td class="num">ชะลอ 8–12%</td><td>ป้องกันก่อน COPD ถาวร</td></tr>
+</table>
+
+<h3>18.6 สรุปเชิง narrative — ทำไมงานนี้สร้างประโยชน์ได้หลายแนว</h3>
+<div class="grid3">
+  <div class="card"><span class="ic">⏱</span><h4>Time advantage</h4><p style="font-size:14px">ปกติใช้เวลา <b>หลายปีถึงหลายทศวรรษ</b> กว่าจะรู้ว่าเป็น COPD — BreathPrint ย้ายจุดตรวจไปที่ <b>Early SAD</b> ซึ่งยังชะลอ/ป้องกันได้ ไม่ใช่แค่บริหารโรคที่เกิดแล้ว</p></div>
+  <div class="card"><span class="ic">🎯</span><h4>Precision advantage</h4><p style="font-size:14px">ไม่ใช่ส่งทุกคนไป รพ. แต่ใช้ <b>risk score + exposure + baseline ส่วนตัว</b> ส่งต่อ IOS เฉพาะคนที่ yield สูง → รักษาตรงจุด ลดทั้ง false reassurance และภาระระบบ</p></div>
+  <div class="card"><span class="ic">📉</span><h4>System advantage</h4><p style="font-size:14px">ลดทั้ง <b>จำนวนคนไป รพ.</b> (OPD/ED) และ <b>จำนวนคนใน รพ.</b> (IPD/เตียง) ในช่วงที่ระบบแออัดที่สุดคือฤดูหมอก — ตรง pain point ของภาคเหนือ</p></div>
+  <div class="card"><span class="ic">💰</span><h4>Economic advantage</h4><p style="font-size:14px">คัดกรองด้วยมือถือต้นทุนต่ำ แต่ลดค่า IPD สูง (~13,000 บาท/ครั้ง) — ตรงกับหลักฐานว่า <b>early case-finding cost-effective</b> ในหลายประเทศ</p></div>
+  <div class="card"><span class="ic">🧬</span><h4>Science advantage</h4><p style="font-size:14px">พิสูจน์สาย <b>PM2.5 → acoustic SAD signature</b> ครั้งแรก → เปิดทางนโยบายมลพิษเชิงสุขภาพ ไม่ใช่แค่ AQI</p></div>
+  <div class="card"><span class="ic">🌏</span><h4>Equity advantage</h4><p style="font-size:14px">คนชนบทที่ไม่มี spirometry ใกล้บ้านยังคัดกรองได้ → ลดช่องว่าง <b>urban–rural</b> ในการเข้าถึง preventive pulmonology</p></div>
+</div>
+
+<div class="callout good">
+<strong>สรุป one-liner สำหรับ proposal/grant.</strong>
+<i>"BreathPrint เปลี่ยนการตอบสนองต่อวิกฤต PM2.5 จากการรักษาปอดที่เสียหายแล้ว (reactive) เป็นการค้นหาและป้องกันความเสียหายหลอดลมฝอยระยะต้น (proactive) — คาดลดการเข้ารพ. 20–30%, วินิจฉัยล่าช้า ~6–8 ปี, และต้นทุน PM2.5-respiratory 25–30% ในกรอบเชียงใหม่เมื่อขยายผลครบวงจร."</i>
+</div>
+
+<h3>18.7 สมมติฐานโมเดลและขั้นตอน validate</h3>
+<ol>
+<li><b>Phase A (cross-sectional):</b> ยืนยัน AUROC ≥0.80 สำหรับจับ IOS-defined SAD → ปรับ sensitivity ของ KPI แถวคัดกรอง</li>
+<li><b>Phase B (longitudinal 12–24 เดือน):</b> วัด progression rate, time-to-referral, time-to-IOS จริง → ปรับแถว "เวลาถึงการตรวจพบ"</li>
+<li><b>Health-economic modelling:</b> Markov model (SAD → Pre-COPD → COPD) ใส่ cost ไทยจริงจาก สปสช./BMC 2026 → รายงาน ICER, budget impact</li>
+<li><b>Policy simulation:</b> จำลองขยายจากเชียงใหม่ → 17 จังหวัดภาคเหนือ ด้วย prevalence PM2.5 ต่างกัน</li>
+</ol>
+
+<h4>อ้างอิงเพิ่มเติมสำหรับ Impact Model</h4>
+<p class="ref"><b>BMC Public Health (2026).</b> Treatment costs and determinants in PM2.5-attributable respiratory diseases: Northern Thailand. doi:10.1186/s12889-026-26478-2.</p>
+<p class="ref"><b>Pothirat C, et al.</b> COPD burden northern Thailand. <i>Int J COPD</i> 2015. PMID:26082627.</p>
+<p class="ref"><b>Nan Hospital study.</b> PM2.5 and AECOPD, <i>J Health Sci Thailand</i>. thaidj.org — OR 1.3–1.6.</p>
+<p class="ref"><b>NESDC / BBC (2024).</b> &gt;10 million Thais sought pollution-related treatment in 2023.</p>
+<p class="ref"><b>ARCTIC cohort.</b> Early vs late COPD diagnosis — exacerbations, costs. <i>Int J COPD</i> 2019. PMC6526023.</p>
+<p class="ref"><b>Thorax (2019).</b> Cost-effectiveness of systematic COPD case-finding. ICER £16,596/QALY.</p>
+<p class="ref"><b>Thorax (2024).</b> COPD integrated disease management — hospitalization −9.1/1000/mo at 12 months.</p>
+<p class="ref"><b>npj Prim Care Respir Med (2025).</b> Systematic review: COPD screening cost-effectiveness.</p>
+
+<!-- ============ 19 ============ -->
+<h2 class="sec" id="s19"><span class="n">19</span> References</h2>
+<p class="footnote">รายการที่มี <span class="flag">⚑</span> ต้องตรวจ DOI/ปี/หน้า ให้ครบก่อนส่งฉบับจริง.</p>
+
+<h4>Clinical / Epidemiology</h4>
+<p class="ref"><b>Xiao D, et al.</b> Prevalence and risk factors of small airway dysfunction… China Pulmonary Health study. <i>Lancet Respir Med</i> 2020;8(11):1081–1093. doi:10.1016/S2213-2600(20)30155-7.</p>
+<p class="ref"><b>Hogg JC, et al.</b> The nature of small-airway obstruction in COPD. <i>NEJM</i> 2004;350(26):2645–2653. doi:10.1056/NEJMoa032158.</p>
+<p class="ref"><b>McDonough JE, et al.</b> Small-airway obstruction and emphysema in COPD. <i>NEJM</i> 2011;365(17):1567–1575. doi:10.1056/NEJMoa1106955.</p>
+<p class="ref"><b>Han MK, et al.</b> From GOLD 0 to Pre-COPD. <i>Am J Respir Crit Care Med</i> 2021;203(4):414–423. doi:10.1164/rccm.202008-3328PP.</p>
+<p class="ref"><b>Su Z-Q, et al.</b> Significances of spirometry and impulse oscillometry for detecting small airway disorders. <i>Respir Res</i> 2021;22:68. doi:10.1186/s12931-021-01662-7.</p>
+<p class="ref"><b>King GG, et al.</b> Technical standards for respiratory oscillometry. <i>Eur Respir J</i> 2020;55(2):1900753. <span class="flag">⚑</span></p>
+<p class="ref"><b>Pothirat C, et al.</b> COPD burden urban vs rural northern Thailand. <i>Int J COPD</i> 2015. PMID:26082627. <span class="flag">⚑</span></p>
+
+<h4>Acoustic Biomarkers (clinical)</h4>
+<p class="ref"><b>Laguarta J, et al.</b> COVID-19 AI diagnosis using only cough recordings. <i>IEEE OJEMB</i> 2020;1:275–281. doi:10.1109/OJEMB.2020.3026928.</p>
+<p class="ref"><b>Porter P, et al.</b> Diagnostic accuracy of an automated cough-sound analytic system. <i>Respir Res</i> 2019;20:81. doi:10.1186/s12931-019-1046-6. <span class="flag">⚑</span></p>
+
+<h4>Audio-LLM / Models</h4>
+<p class="ref"><b>Chu Y, et al.</b> Qwen2-Audio. arXiv:2407.10759 (2024).</p>
+<p class="ref"><b>Xu J, et al.</b> Qwen2.5-Omni Technical Report. (2025). github.com/QwenLM/Qwen2.5-Omni.</p>
+<p class="ref"><b>Goel A, et al. (NVIDIA/UMD).</b> Audio Flamingo 3. arXiv:2507.08128 (2025).</p>
+<p class="ref"><b>NVIDIA/UMD.</b> Audio Flamingo Next. arXiv:2604.10905 (2026). HF: nvidia/audio-flamingo-next-hf.</p>
+<p class="ref"><b>Xiaomi Research.</b> MiDashengLM. arXiv:2508.03983 (2025).</p>
+<p class="ref"><b>Tang C, et al.</b> SALMONN. ICLR 2024. arXiv:2310.13289.</p>
+<p class="ref"><b>Ghosh S, et al.</b> GAMA: general-purpose audio-language model. EMNLP 2024. arXiv:2406.11768.</p>
+<p class="ref"><b>Gong Y, et al.</b> Listen, Think, and Understand (LTU/LTU-AS). arXiv:2305.10790.</p>
+
+<h4>Encoders / SSM</h4>
+<p class="ref"><b>Shams S, et al.</b> SSAMBA: self-supervised audio Mamba. SLT 2024. arXiv:2405.11831.</p>
+<p class="ref"><b>Bhati S, et al.</b> DASS: distilled audio state-space models. ICASSP 2025. arXiv:2407.04082.</p>
+<p class="ref"><b>Chen S, et al.</b> BEATs. arXiv:2212.09058.</p>
+<p class="ref"><b>Chen W, et al.</b> EAT: efficient audio transformer. IJCAI 2024. arXiv:2401.03497.</p>
+<p class="ref"><b>Dinkel H, et al.</b> Dasheng. Interspeech 2024. arXiv:2406.06992.</p>
+<p class="ref"><b>Niizumi D, et al.</b> M2D / M2D-CLAP. arXiv:2404.06095.</p>
+<p class="ref"><b>Gong Y, et al.</b> AST / SSAST. arXiv:2104.01778 / 2110.09784.</p>
+
+<h4>Probing / Layer-selection (รากฐานเทคนิค)</h4>
+<p class="ref"><b>Yang S, et al.</b> SUPERB benchmark (learnable layer-weighting). Interspeech 2021. arXiv:2105.01051.</p>
+<p class="ref"><b>Zhang A, Xie, Yang, Liu.</b> AG-REPA: causal layer selection / Store–Contribute Dissociation (FoG-A probe). ICML 2026. (งานของผู้เสนอ)</p>
+
+<h4>Respiratory training techniques</h4>
+<p class="ref"><b>Bae S, et al.</b> Patch-Mix contrastive learning for respiratory sound. Interspeech 2023. arXiv:2305.14032.</p>
+<p class="ref"><b>(SG-SCL)</b> Stethoscope-guided supervised contrastive learning. arXiv:2312.09603.</p>
+<p class="ref"><b>(BTS)</b> Metadata-as-text fusion for respiratory sound. arXiv:2406.06786.</p>
+<p class="ref"><b>(Adaptive Differential Denoising)</b> arXiv:2506.02505 (2025).</p>
+<p class="ref"><b>(PC-MCL)</b> Patient-consistent multi-cycle learning. arXiv:2601.17080 (2026).</p>
+
+<h4>Datasets</h4>
+<p class="ref"><b>Rocha BM, et al.</b> ICBHI 2017 respiratory sound database. IFMBE Proc. 2018.</p>
+<p class="ref"><b>Zhang Q, et al.</b> SPRSound. <i>IEEE TBioCAS</i> 2022;16(5):867–881.</p>
+<p class="ref"><b>Hsu F-S, et al.</b> HF_Lung_V1/V2. arXiv:2102.04062 / Appl. Sci. 2022;12(15):7623.</p>
+<p class="ref"><b>Sharma N, et al.</b> Coswara. <i>Sci Data</i> 2023;10:397. doi:10.1038/s41597-023-02266-0.</p>
+<p class="ref"><b>Orlandic L, et al.</b> COUGHVID. <i>Sci Data</i> 2021;8:156. doi:10.1038/s41597-021-00937-4.</p>
+<p class="ref"><b>Zhang A, et al.</b> Resp-Agent &amp; Resp-229K. ICLR 2026. github.com/zpforlove/Resp-Agent.</p>
+
+<hr>
+<p class="footnote" style="text-align:center">
+BreathPrint AI — Revised Full Proposal v2.0 · จัดทำเป็นเอกสารทำงาน (working document) · ตัวเลข/ผลลัพธ์เป็นเป้าหมายและสมมติฐาน ยังไม่ใช่ผลการทดลองจริง · โปรดตรวจการอ้างอิงที่ทำเครื่องหมาย ⚑ ก่อนเผยแพร่.
+</p>
+
+</div>
+</body>
+</html>
