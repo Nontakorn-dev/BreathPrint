@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { ConsentScreen } from '@/components/consent/ConsentScreen'
 import { ProfileForm } from '@/components/profile/ProfileForm'
 import { Logo } from '@/components/brand/Logo'
+import { AppFooter } from '@/components/layout/AppFooter'
 import { PageContainer, PageMain, SurfacePanel, PageHero } from '@/components/layout/PageContainer'
 import { ensureAuth } from '@/lib/supabase'
 import { saveProfile } from '@/lib/storage'
@@ -33,34 +34,27 @@ export function OnboardingPage() {
   return (
     <PageContainer>
       <header className="glass-nav">
-        <div className="max-w-lg mx-auto px-4 h-16 flex items-center justify-center">
+        <div className="max-w-6xl mx-auto w-full px-5 sm:px-8 lg:px-10 h-[4.25rem] flex items-center justify-center">
           <Logo />
         </div>
       </header>
-      <PageMain maxWidth="sm">
-        {step === 'consent' && (
-          <>
-            <PageHero
-              title="เข้าสู่ระบบ"
-              subtitle="เข้าสู่แดชบอร์ด BreathPrint ของคุณ"
-            />
-            <SurfacePanel>
-              <ConsentScreen onAccept={handleConsent} />
-            </SurfacePanel>
-          </>
-        )}
-        {step === 'profile' && userId && (
-          <>
-            <PageHero
-              title="ตั้งค่าโปรไฟล์"
-              subtitle="ข้อมูลสุขภาพพื้นฐานสำหรับการคัดกรอง"
-            />
-            <SurfacePanel>
-              <ProfileForm userId={userId} onSubmit={handleProfile} />
-            </SurfacePanel>
-          </>
-        )}
+      <PageMain narrow>
+        <PageHero
+          title={step === 'consent' ? 'เข้าสู่ระบบ' : 'ตั้งค่าโปรไฟล์'}
+          subtitle={
+            step === 'consent'
+              ? 'เข้าสู่แดชบอร์ด BreathPrint ของคุณ'
+              : 'ข้อมูลสุขภาพพื้นฐานสำหรับการคัดกรอง'
+          }
+        />
+        <SurfacePanel>
+          {step === 'consent' && <ConsentScreen onAccept={handleConsent} />}
+          {step === 'profile' && userId && (
+            <ProfileForm userId={userId} onSubmit={handleProfile} />
+          )}
+        </SurfacePanel>
       </PageMain>
+      <AppFooter />
     </PageContainer>
   )
 }

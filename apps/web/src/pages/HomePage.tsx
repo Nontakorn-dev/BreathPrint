@@ -28,13 +28,9 @@ export function HomePage() {
   const displayName = profile ? `ผู้ใช้อายุ ${profile.age} ปี` : 'ผู้ใช้'
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 lg:space-y-8">
       <PageHero
-        title={
-          <>
-            ยินดีต้อนรับ, {displayName} 👋
-          </>
-        }
+        title={<>ยินดีต้อนรับ, {displayName} 👋</>}
         subtitle="เลือกเริ่มคัดกรอง บันทึกเสียงหายใจ/ไอ และดู Personal Exposure Dose จาก PM2.5 เพื่อค้นหาความเสี่ยง Early SAD"
       />
 
@@ -49,7 +45,7 @@ export function HomePage() {
       )}
 
       <Link to="/screening">
-        <Button fullWidth size="lg" className="text-base">
+        <Button fullWidth size="lg" className="text-base shadow-lg shadow-brand/20">
           <Mic className="h-5 w-5" />
           เริ่มคัดกรองใหม่
         </Button>
@@ -68,7 +64,9 @@ export function HomePage() {
               key={title}
               className="flex items-start gap-3 rounded-2xl border border-line bg-panel/50 p-4"
             >
-              <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-light/60 ${color}`}>
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-brand-light/60 ${color}`}
+              >
                 <Icon className="h-5 w-5" />
               </div>
               <div>
@@ -80,7 +78,7 @@ export function HomePage() {
         </div>
       </SurfacePanel>
 
-      {lastSession?.result && (
+      {lastSession?.result ? (
         <Link to={`/results/${lastSession.id}`}>
           <SurfacePanel className="hover:border-brand/30 transition-colors cursor-pointer group">
             <div className="flex items-center justify-between">
@@ -101,12 +99,10 @@ export function HomePage() {
             </div>
           </SurfacePanel>
         </Link>
-      )}
-
-      {!lastSession?.result && (
+      ) : (
         <SurfacePanel className="text-center py-8">
           <p className="text-muted text-sm">ยังไม่มีผลคัดกรอง</p>
-          <p className="text-xs text-muted mt-1">เคสตัวอย่าง / บันทึกเสียง / ไมโครโฟน</p>
+          <p className="text-xs text-muted mt-1">กดปุ่มด้านบนเพื่อเริ่มบันทึกเสียงและรับ Risk Score</p>
         </SurfacePanel>
       )}
     </div>

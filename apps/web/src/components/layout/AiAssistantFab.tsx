@@ -7,7 +7,7 @@ export function AiAssistantFab() {
   const [expanded, setExpanded] = useState(false)
 
   return (
-    <div className="fixed bottom-5 right-4 sm:right-6 z-40 flex flex-col items-end gap-2 safe-area-pb">
+    <div className="fixed bottom-6 right-5 sm:right-8 lg:right-10 z-40 flex flex-col items-end gap-2 safe-area-pb">
       {open && !expanded && (
         <div className="surface-card px-4 py-3 max-w-[260px] text-sm text-sub shadow-lg animate-fade-up relative pr-8">
           <button

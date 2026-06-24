@@ -9,14 +9,19 @@ interface LogoProps {
 
 export function Logo({ className, showText = true }: LogoProps) {
   return (
-    <Link to="/" className={cn('flex items-center gap-2.5 group', className)}>
-      <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-brand text-white shadow-md shadow-brand/25 group-hover:scale-105 transition-transform">
-        <Wind className="h-5 w-5" strokeWidth={2.5} />
+    <Link to="/" className={cn('flex items-center gap-3 group', className)}>
+      <div className="relative flex h-10 w-10 lg:h-11 lg:w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand to-brand2 text-white shadow-lg shadow-brand/30 group-hover:shadow-brand/40 group-hover:scale-[1.03] transition-all">
+        <Wind className="h-5 w-5 lg:h-[1.35rem] lg:w-[1.35rem]" strokeWidth={2.5} />
       </div>
       {showText && (
-        <span className="text-lg font-extrabold text-brand font-display tracking-tight">
-          BreathPrint
-        </span>
+        <div className="leading-tight">
+          <span className="block text-lg lg:text-xl font-extrabold text-brand font-display tracking-tight">
+            BreathPrint
+          </span>
+          <span className="hidden sm:block text-[10px] font-semibold text-muted uppercase tracking-widest">
+            AI Screening
+          </span>
+        </div>
       )}
     </Link>
   )

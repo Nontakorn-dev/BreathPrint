@@ -1,5 +1,6 @@
 import { Outlet } from 'react-router-dom'
 import { AppHeader } from '@/components/layout/AppHeader'
+import { AppFooter } from '@/components/layout/AppFooter'
 import { PageContainer, PageMain } from '@/components/layout/PageContainer'
 import { AiAssistantFab } from '@/components/layout/AiAssistantFab'
 
@@ -10,6 +11,7 @@ export function AppShell() {
       <PageMain>
         <Outlet />
       </PageMain>
+      <AppFooter />
       <AiAssistantFab />
     </PageContainer>
   )

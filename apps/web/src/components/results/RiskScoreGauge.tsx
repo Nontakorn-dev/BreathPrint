@@ -13,7 +13,7 @@ export function RiskScoreGauge({ score, band }: RiskScoreGaugeProps) {
     <div className="space-y-4">
       <div className="text-center">
         <p className="text-sm font-medium text-sub">BreathPrint Risk Score</p>
-        <p className="text-5xl font-extrabold text-ink font-display mt-1">{score}</p>
+        <p className="text-5xl lg:text-6xl font-extrabold text-ink font-display mt-1">{score}</p>
         <p
           className="text-sm font-bold mt-1"
           style={{ color: getRiskBandColor(band) }}
@@ -23,7 +23,7 @@ export function RiskScoreGauge({ score, band }: RiskScoreGaugeProps) {
       </div>
 
       <div className="relative px-2">
-        <div className="risk-gradient h-7 rounded-full" />
+        <div className="risk-gradient h-8 lg:h-9 rounded-full shadow-inner" />
         <div
           className="absolute top-0 -translate-x-1/2 transition-all"
           style={{ left: `${pointerPct}%` }}

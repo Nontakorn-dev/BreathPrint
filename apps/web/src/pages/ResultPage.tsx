@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { Home, RotateCcw } from 'lucide-react'
 import { AppHeader } from '@/components/layout/AppHeader'
+import { AppFooter } from '@/components/layout/AppFooter'
 import { PageContainer, PageMain, PageHero, SurfacePanel } from '@/components/layout/PageContainer'
 import { Stepper } from '@/components/ui/Stepper'
 import { Button } from '@/components/ui/Button'
@@ -37,14 +38,15 @@ export function ResultPage() {
     return (
       <PageContainer>
         <AppHeader />
-        <PageMain maxWidth="sm">
-          <div className="text-center py-12">
+        <PageMain>
+          <div className="text-center py-16">
             <p className="text-sub">ไม่พบผลการคัดกรอง</p>
             <Link to="/">
               <Button className="mt-4">กลับหน้าหลัก</Button>
             </Link>
           </div>
         </PageMain>
+        <AppFooter />
       </PageContainer>
     )
   }
@@ -60,44 +62,47 @@ export function ResultPage() {
           subtitle="BreathPrint Risk Score และคำอธิบายจาก audio-LLM"
         />
 
-        <Stepper steps={RESULT_STEPS} currentStep={3} className="mb-6" />
+        <Stepper steps={RESULT_STEPS} currentStep={3} className="mb-6 lg:mb-8" />
 
-        <div className="space-y-5">
-          <DisclaimerBanner />
+        <DisclaimerBanner />
 
-          <SurfacePanel>
-            <RiskScoreGauge score={result.riskScore} band={result.riskBand} />
-          </SurfacePanel>
+        <div className="grid lg:grid-cols-2 gap-6 lg:gap-8 mt-6">
+          <div className="space-y-6">
+            <SurfacePanel>
+              <RiskScoreGauge score={result.riskScore} band={result.riskBand} />
+            </SurfacePanel>
+            <ChangeAlert
+              currentScore={result.riskScore}
+              baselineScore={baseline?.avgRiskScore ?? null}
+              exposureDelta={result.exposureDeltaPct}
+            />
+            <ReferralCard level={result.referralLevel} score={result.riskScore} />
+          </div>
 
-          <ChangeAlert
-            currentScore={result.riskScore}
-            baselineScore={baseline?.avgRiskScore ?? null}
-            exposureDelta={result.exposureDeltaPct}
-          />
-
-          <ExplanationPanel bullets={result.explanationBullets} timeEvents={result.timeEvents} />
-          <ReferralCard level={result.referralLevel} score={result.riskScore} />
-
-          <p className="text-xs text-muted text-center">
-            Model: {result.modelVersion} · คัดกรอง ไม่ใช่วินิจฉัย
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-3 pt-2">
-            <Link to="/screening" className="flex-1">
-              <Button fullWidth size="lg">
-                <RotateCcw className="h-4 w-4" />
-                คัดกรองใหม่
-              </Button>
-            </Link>
-            <Link to="/" className="flex-1">
-              <Button fullWidth variant="outline" size="lg">
-                <Home className="h-4 w-4" />
-                กลับหน้าหลัก
-              </Button>
-            </Link>
+          <div className="space-y-6">
+            <ExplanationPanel bullets={result.explanationBullets} timeEvents={result.timeEvents} />
+            <p className="text-xs text-muted text-center lg:text-left px-2">
+              Model: {result.modelVersion} · คัดกรอง ไม่ใช่วินิจฉัย
+            </p>
           </div>
         </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 mt-8">
+          <Link to="/screening" className="flex-1">
+            <Button fullWidth size="lg">
+              <RotateCcw className="h-4 w-4" />
+              คัดกรองใหม่
+            </Button>
+          </Link>
+          <Link to="/" className="flex-1">
+            <Button fullWidth variant="outline" size="lg">
+              <Home className="h-4 w-4" />
+              กลับหน้าหลัก
+            </Button>
+          </Link>
+        </div>
       </PageMain>
+      <AppFooter />
     </PageContainer>
   )
 }

@@ -22,9 +22,9 @@ import { saveScreening } from '@/lib/storage'
 import type { ScreeningSession } from '@/types'
 
 const SCREENING_STEPS = [
-  { id: 'env', label: 'ข้อมูล & สิ่งแวดล้อม' },
+  { id: 'env', label: 'รับสัญญาณ' },
   { id: 'audio', label: 'บันทึกเสียง' },
-  { id: 'submit', label: 'ส่งวิเคราะห์' },
+  { id: 'analyze', label: 'วิเคราะห์ AI' },
   { id: 'report', label: 'รายงานผล' },
 ]
 
@@ -111,9 +111,15 @@ export function ScreeningWizard() {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-start gap-3">
-        <Button variant="ghost" size="icon" onClick={goBack} aria-label="ย้อนกลับ" className="shrink-0 mt-1">
+    <div className="space-y-6 lg:space-y-8">
+      <div className="flex items-start gap-4">
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={goBack}
+          aria-label="ย้อนกลับ"
+          className="shrink-0 mt-1 border border-line bg-surface"
+        >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <PageHero
@@ -125,7 +131,11 @@ export function ScreeningWizard() {
 
       <Stepper steps={SCREENING_STEPS} currentStep={stepperIndex} />
 
-      <SurfacePanel>
+      <SurfacePanel className="min-h-[420px] lg:min-h-[480px]">
+        <p className="section-label mb-1">
+          ขั้นตอน {stepIndex + 1} / {WIZARD_STEPS.length}
+        </p>
+
         {store.step === 'location' && (
           <LocationStep
             onComplete={(loc, dose) => {
@@ -147,7 +157,7 @@ export function ScreeningWizard() {
         {store.step === 'breath' && (
           <AudioRecorder
             title="บันทึกเสียงหายใจ"
-            description="หายใจตามปกติ 10–15 วินาที ในที่เงียบ"
+            description="หายใจตามปกติ 10–15 วินาที ในที่เงียบ · วางไมค์ห่างจากปาก 15–20 ซม."
             minDuration={8}
             maxDuration={15}
             onComplete={(blob, duration, qualityOk) => {

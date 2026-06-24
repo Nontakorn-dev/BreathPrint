@@ -40,11 +40,11 @@ export function SymptomForm({ values, onChange, onComplete }: SymptomFormProps) 
         </p>
       </div>
 
-      <div className="space-y-4">
+      <div className="grid lg:grid-cols-2 gap-4">
         {SYMPTOM_ITEMS.map((item) => (
           <div
             key={item.key}
-            className="rounded-2xl border border-line bg-panel/30 p-4"
+            className="rounded-2xl border border-line bg-panel/30 p-4 lg:p-5 hover:border-brand/25 transition-colors"
           >
             <div className="mb-3">
               <p className="font-semibold text-ink text-sm">{item.label}</p>
