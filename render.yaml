@@ -1,0 +1,30 @@
+# Render Blueprint — deploy the BreathPrint backend.
+#
+# How to use:
+#   1. Push this repo to GitHub (done: Nontakorn-dev/BreathPrint).
+#   2. Render dashboard → New → Blueprint → select this repo.
+#   3. Render reads this file and creates the `breathprint-backend` web service.
+#   4. When prompted, paste your TYPHOON_API_KEY (sync:false = not stored here).
+#
+# IMPORTANT — RAM: torch + the AST audio model need ~2GB. Use the "Standard"
+# plan (2 GB). The free 512 MB tier will OOM on model load. (If you want free,
+# the service still works in deterministic-fallback mode if torch is removed —
+# but then there's no real audio model.)
+services:
+  - type: web
+    name: breathprint-backend
+    rootDir: backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: standard
+    envVars:
+      - key: TYPHOON_API_KEY
+        sync: false
+      - key: TYPHOON_BASE_URL
+        value: https://api.opentyphoon.ai/v1
+      - key: TYPHOON_MODEL
+        value: typhoon-v2.5-30b-a3b-instruct
+      - key: HF_AUDIO_MODEL
+        value: MIT/ast-finetuned-audioset-10-10-0.4593
+      - key: CORS_ORIGIN
+        value: https://web-ashen-ten-40.vercel.app

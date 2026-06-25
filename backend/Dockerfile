@@ -15,4 +15,5 @@ COPY . .
 ENV HF_HOME=/data/hf_cache
 
 EXPOSE 8000
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Render (and others) inject PORT; fall back to 8000 locally.
+CMD uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}
