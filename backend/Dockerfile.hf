@@ -22,10 +22,10 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY --chown=user:user . .
 USER user
 
-# /data is writable on Spaces (ephemeral on the free tier — the ~340MB AST model
-# re-downloads on cold start, ~1-2 min; fine for a demo).
-ENV HF_HOME=/data/hf_cache \
-    TRANSFORMERS_CACHE=/data/hf_cache/transformers \
+# Cache the audio model under /tmp (always writable). NOTE: /data requires a
+# paid persistent disk on HF Spaces, so we avoid it. /tmp is ephemeral — the
+# ~340MB AST model re-downloads on cold start (~1-2 min), fine for a demo.
+ENV HF_HOME=/tmp/hf_cache \
     HOME=/home/user
 
 EXPOSE 7860
