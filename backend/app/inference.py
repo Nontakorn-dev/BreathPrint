@@ -21,6 +21,7 @@ import io
 from typing import Any
 
 _model_cache: dict[str, Any] = {}
+_last_model_error: str | None = None
 
 # AudioSet ontology labels we extract (lower-cased match).
 _TARGET_LABELS = {
@@ -36,6 +37,7 @@ _TARGET_LABELS = {
 
 def _load_model(model_id: str):
     """Lazily load + cache the AST model. Returns (processor, model) or None."""
+    global _last_model_error
     if model_id in _model_cache:
         cached = _model_cache[model_id]
         return cached if cached else None
@@ -47,9 +49,11 @@ def _load_model(model_id: str):
         model = ASTForAudioClassification.from_pretrained(model_id)
         model.eval()
         _model_cache[model_id] = (processor, model)
+        _last_model_error = None
         return processor, model
     except Exception as exc:  # model unavailable → caller uses deterministic path
         _model_cache[model_id] = None
+        _last_model_error = f"{type(exc).__name__}: {exc}"
         print(f"[inference] audio model unavailable ({type(exc).__name__}): {exc}")
         return None
 

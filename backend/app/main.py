@@ -21,6 +21,7 @@ from pydantic import BaseModel
 
 from .config import get_settings
 from .inference import _model_cache, analyze
+from . import inference as _inf
 from .chat import chat
 
 settings = get_settings()
@@ -48,9 +49,30 @@ def health():
         "status": "ok",
         "audio_model": model_id,
         "audio_model_ready": model_ready,
+        "audio_model_error": _inf._last_model_error,
         "typhoon_configured": bool(settings.typhoon_api_key),
         "typhoon_model": settings.typhoon_model,
     }
+
+
+@app.get("/models")
+async def models():
+    """List the Typhoon models available to the configured key (for debugging)."""
+    if not settings.typhoon_api_key:
+        return {"error": "TYPHOON_API_KEY not set"}
+    import httpx
+
+    async with httpx.AsyncClient(timeout=30) as client:
+        r = await client.get(
+            f"{settings.typhoon_base_url}/models",
+            headers={"Authorization": f"Bearer {settings.typhoon_api_key}"},
+        )
+    if r.status_code != 200:
+        return {"status": r.status_code, "body": r.text[:500]}
+    data = r.json()
+    # OpenAI-style: {"data": [{"id": "..."}, ...]}
+    ids = [m.get("id") for m in data.get("data", [])] if isinstance(data, dict) else data
+    return {"available_models": ids}
 
 
 @app.post("/v1/analyze")
