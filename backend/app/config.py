@@ -4,6 +4,11 @@ Nothing is hard-coded. Copy backend/.env.example → backend/.env and fill it in
 from __future__ import annotations
 import os
 from dataclasses import dataclass
+from dotenv import load_dotenv
+
+# Load backend/.env (git-ignored) so os.getenv sees TYPHOON_API_KEY etc.
+# Runs at import time, before get_settings() reads anything.
+load_dotenv()
 
 
 @dataclass(frozen=True)
