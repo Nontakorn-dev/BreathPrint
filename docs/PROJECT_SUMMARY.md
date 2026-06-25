@@ -111,7 +111,7 @@ cd apps/web && npm run dev      # → localhost:5173
 | Phase | ทำอะไร | ผลลัพธ์ | ต้องการ |
 |---|---|---|---|
 | **0 — ปัจจุบัน** ✅ | AST classifier สำเร็จ | pipeline "ของจริง" เสียงเข้าโมเดลจริง (แต่ไม่ใช่งานเรา) | — |
-| **1 — encoder + layer-probe** ⭐ | เปลี่ยน AST → **Dasheng หรือ BEATs เป็น encoder** (ดึง hidden states ไม่ใช่ classifier) + ใส่ **layer-weighted probe** แบบ CardiacZ/AG-REPA (FoG-A เลือก layer → probe head) | เป็น **หัวใจเทคนิคของเรา** (layer selection) | GPU ฝั่ง server (HF เครื่องใหญ่ขึ้น หรือ local), อาจ pretrain encoder ต่อ |
+| **1 — encoder + layer-probe** ✅ | **SSL encoder + layer-weighted probe (AG-REPA/CardiacZ seam)** — **ทำแล้ว live** ใช้ `facebook/hubert-base-ls960` (13 layers/768d) เป็น default; สลับเป็น Dasheng/BEATs ได้ที่ env `HF_ENCODER_MODEL` | **เทคนิคของเราทำงานจริง** — encoder รันบนเสียงจริง → hidden states → layer weights → probe (probe ยังไม่ได้เทรน รอข้อมูล IOS) | รายละเอียดใน `/v1/analyze` (ฟิลด์ `encoder`) + `/health` (`encoder_ready`) |
 | **2 — audio-LLM** | เพิ่ม **Audio Flamingo 3 / Qwen2.5-Omni** สำหรับ explanation + time-grounding (ระบุช่วงเสียงผิดปกติ) | อธิบายผลเป็นภาษา ลด black-box | GPU เยอะ (audio-LLM ใหญ่) |
 | **3 — โมเดล SAD เฉพาะทาง** 🧬 | เทรน probe บน **ข้อมูล IOS labels** (cohort BreathPrint–Chiang Mai) | โมเดล SAD จริงตาม proposal | **ข้อมูลเสียง + IOS labels** (ยังไม่มีในโลก = ช่องว่างวิจัย), IRB, เวลา |
 
