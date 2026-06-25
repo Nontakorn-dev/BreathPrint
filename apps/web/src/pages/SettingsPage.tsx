@@ -21,7 +21,7 @@ export function SettingsPage() {
     const sessions = await getUserScreenings(profile.id)
     const data = {
       profile,
-      sessions: sessions.map(({ breathAudioBlob, coughAudioBlob, ...rest }) => rest),
+      sessions: sessions.map(({ breathAudioBlob: _b, coughAudioBlob: _c, ...rest }) => rest),
     }
     const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
     const url = URL.createObjectURL(blob)

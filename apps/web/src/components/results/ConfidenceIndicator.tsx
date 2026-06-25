@@ -9,9 +9,9 @@ interface ConfidenceIndicatorProps {
 }
 
 /** Threshold below which the result is treated as low-signal (GallopGuard principle). */
-export const LOW_CONFIDENCE_THRESHOLD = 0.55
+const LOW_CONFIDENCE_THRESHOLD = 0.55
 
-export function getConfidenceLevel(c: number): 'high' | 'moderate' | 'low' {
+function getConfidenceLevel(c: number): 'high' | 'moderate' | 'low' {
   if (c >= 0.75) return 'high'
   if (c >= LOW_CONFIDENCE_THRESHOLD) return 'moderate'
   return 'low'

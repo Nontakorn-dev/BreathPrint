@@ -1,4 +1,4 @@
-import { lazy, Suspense, useEffect, useState } from 'react'
+import { lazy, Suspense, useCallback, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
@@ -23,16 +23,16 @@ export function HistoryPage() {
   const [baseline, setBaseline] = useState<UserBaseline | null>(null)
   const [syncing, setSyncing] = useState(false)
 
-  const load = async () => {
+  const load = useCallback(async () => {
     if (!userId) return
     const [s, b] = await Promise.all([getUserScreenings(userId), getBaseline(userId)])
     setSessions(s)
     setBaseline(b ?? null)
-  }
+  }, [userId])
 
   useEffect(() => {
     load()
-  }, [userId])
+  }, [load])
 
   const handleSync = async () => {
     if (!userId) return
