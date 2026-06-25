@@ -2,6 +2,7 @@ import { Mic, Square, RotateCcw, CheckCircle, AlertCircle } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { Waveform } from '@/components/audio/Waveform'
 import { useAudioRecorder } from '@/hooks/useAudioRecorder'
+import { useT } from '@/i18n'
 import { cn } from '@/lib/utils'
 
 interface AudioRecorderProps {
@@ -19,6 +20,7 @@ export function AudioRecorder({
   maxDuration = 15,
   onComplete,
 }: AudioRecorderProps) {
+  const { t } = useT()
   const recorder = useAudioRecorder({ minDuration, maxDuration })
 
   const handleConfirm = () => {
@@ -35,15 +37,15 @@ export function AudioRecorder({
       </div>
 
       <div className="rounded-2xl border border-line bg-panel/50 p-4">
-        <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">คลื่นเสียง</p>
+        <p className="text-xs font-semibold text-muted uppercase tracking-wide mb-3">{t('screening.audio.waveform')}</p>
         <Waveform bars={recorder.waveform} isActive={recorder.isRecording} />
 
         <p className="text-sm text-sub mt-3 text-center">
           {recorder.isRecording
-            ? `กำลังบันทึก... ${recorder.duration.toFixed(1)}s / ${maxDuration}s`
+            ? t('screening.audio.recording', { cur: recorder.duration.toFixed(1), max: maxDuration })
             : recorder.audioBlob
-              ? `บันทึกแล้ว ${recorder.duration.toFixed(1)} วินาที`
-              : `บันทึก ${minDuration}–${maxDuration} วินาที`}
+              ? t('screening.audio.recorded', { duration: recorder.duration.toFixed(1) })
+              : t('screening.audio.recordDuration', { min: minDuration, max: maxDuration })}
         </p>
 
         {recorder.error && (
@@ -78,14 +80,14 @@ export function AudioRecorder({
         {!recorder.isRecording && !recorder.audioBlob && (
           <Button fullWidth size="lg" onClick={recorder.startRecording}>
             <Mic className="h-5 w-5" />
-            เริ่มอัด
+            {t('screening.audio.start')}
           </Button>
         )}
 
         {recorder.isRecording && (
           <Button fullWidth size="lg" variant="danger" onClick={recorder.stopRecording}>
             <Square className="h-5 w-5" />
-            หยุดบันทึก
+            {t('screening.audio.stop')}
           </Button>
         )}
 
@@ -93,19 +95,18 @@ export function AudioRecorder({
           <>
             <Button fullWidth size="lg" onClick={handleConfirm} disabled={!recorder.qualityOk}>
               <CheckCircle className="h-5 w-5" />
-              ใช้การบันทึกนี้
+              {t('screening.audio.use')}
             </Button>
             <Button fullWidth variant="ghost" onClick={recorder.reset}>
               <RotateCcw className="h-4 w-4" />
-              บันทึกใหม่
+              {t('screening.audio.retake')}
             </Button>
           </>
         )}
       </div>
 
       <p className="text-xs text-muted text-center bg-brand-light/40 dark:bg-brand/10 rounded-xl px-4 py-3">
-        <strong className="text-brand">เคล็ดลับ:</strong> ถือมือถือห่างจากปาก 15–20 ซม.
-        นั่งตัวตรง หายใจตามปกติ ในที่เงียบ
+        <strong className="text-brand">{t('screening.audio.tip')}</strong> {t('screening.audio.tipBody')}
       </p>
     </div>
   )

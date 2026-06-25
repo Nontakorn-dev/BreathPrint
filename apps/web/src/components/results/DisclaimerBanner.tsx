@@ -1,7 +1,9 @@
 import { AlertTriangle } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { useT } from '@/i18n'
 
 export function DisclaimerBanner({ className, compact }: { className?: string; compact?: boolean }) {
+  const { t } = useT()
   return (
     <div
       className={cn(
@@ -13,12 +15,11 @@ export function DisclaimerBanner({ className, compact }: { className?: string; c
       <AlertTriangle className="h-5 w-5 text-warn shrink-0 mt-0.5" />
       <div>
         <p className={cn('font-bold text-ink', compact ? 'text-sm' : 'text-base')}>
-          เครื่องมือคัดกรอง — ไม่ใช่การวินิจฉัย
+          {t('result.disclaimerTitle')}
         </p>
         {!compact && (
           <p className="text-sm text-sub mt-1">
-            BreathPrint AI ใช้สำหรับคัดกรองความเสี่ยงเท่านั้น ไม่สามารถแทนการตรวจทางคลินิก
-            เช่น IOS หรือ spirometry หากมีอาการรุนแรง กรุณาพบแพทย์ทันที
+            {t('result.disclaimerBody')}
           </p>
         )}
       </div>

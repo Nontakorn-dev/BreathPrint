@@ -5,8 +5,16 @@ import {
   saveScreening,
   updateBaselineFromScreenings,
   getUserScreenings,
+  getBaseline,
 } from '@/lib/storage'
-import { uploadAudio, isSupabaseConfigured } from '@/lib/supabase'
+import {
+  uploadAudio,
+  isSupabaseConfigured,
+  upsertProfile,
+  upsertScreening,
+  insertResult,
+  upsertBaseline,
+} from '@/lib/supabase'
 import { runInference } from '@/lib/inference'
 import { getProfile } from '@/lib/storage'
 import type { ScreeningSession } from '@/types'
@@ -76,6 +84,10 @@ export async function processAndSaveScreening(
       baseline.length > 0
         ? baseline.reduce((s, x) => s + (x.exposureDoseWeekly ?? 0), 0) / baseline.length
         : undefined,
+    breathAudio: session.breathAudioBlob,
+    coughAudio: session.coughAudioBlob,
+    breathDuration: session.breathDuration,
+    coughDuration: session.coughDuration,
   })
 
   const completed: ScreeningSession = {
@@ -88,6 +100,7 @@ export async function processAndSaveScreening(
       id: generateId(),
       screeningId: session.id,
       riskScore: inference.riskScore,
+      confidence: inference.confidence,
       riskBand: inference.riskBand,
       explanationBullets: inference.explanationBullets,
       timeEvents: inference.timeEvents,
@@ -101,6 +114,20 @@ export async function processAndSaveScreening(
   await saveScreening(completed)
   const updated = await getUserScreenings(userId)
   await updateBaselineFromScreenings(userId, updated)
+
+  if (isSupabaseConfigured) {
+    // Best-effort cloud sync. Non-fatal: local IndexedDB is the source of truth;
+    // on failure the session stays in the pending queue and retries on reconnect.
+    try {
+      const finalBaseline = await getBaseline(userId)
+      await upsertProfile(profile)
+      await upsertScreening(completed, userId)
+      if (completed.result) await insertResult(completed.result, completed.id)
+      if (finalBaseline) await upsertBaseline(finalBaseline, userId)
+    } catch {
+      // swallowed — see comment above
+    }
+  }
 
   return completed
 }

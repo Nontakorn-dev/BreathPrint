@@ -20,13 +20,7 @@ import { generateId, getDeviceModel } from '@/lib/utils'
 import { processAndSaveScreening, queueScreeningForSync, isOnline } from '@/lib/offline-queue'
 import { saveScreening } from '@/lib/storage'
 import type { ScreeningSession } from '@/types'
-
-const SCREENING_STEPS = [
-  { id: 'env', label: 'รับสัญญาณ' },
-  { id: 'audio', label: 'บันทึกเสียง' },
-  { id: 'analyze', label: 'วิเคราะห์ AI' },
-  { id: 'report', label: 'รายงานผล' },
-]
+import { useT } from '@/i18n'
 
 function getStepperIndex(step: WizardStep): number {
   if (step === 'location' || step === 'symptoms') return 0
@@ -36,11 +30,19 @@ function getStepperIndex(step: WizardStep): number {
 }
 
 export function ScreeningWizard() {
+  const { t } = useT()
   const navigate = useNavigate()
   const userId = useAuthStore((s) => s.userId)!
   const store = useScreeningStore()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [progress, setProgress] = useState(0)
+
+  const SCREENING_STEPS = [
+    { id: 'env', label: t('screening.stepEnv') },
+    { id: 'audio', label: t('screening.stepAudio') },
+    { id: 'analyze', label: t('screening.stepAnalyze') },
+    { id: 'report', label: t('screening.stepReport') },
+  ]
 
   const stepIndex = getStepIndex(store.step)
   const stepperIndex = getStepperIndex(store.step)
@@ -70,6 +72,8 @@ export function ScreeningWizard() {
       userId,
       breathAudioBlob: store.breathBlob,
       coughAudioBlob: store.coughBlob,
+      breathDuration: store.breathDuration,
+      coughDuration: store.coughDuration,
       lat: store.location.lat,
       lng: store.location.lng,
       pm25UgM3: store.location.pm25UgM3,
@@ -117,15 +121,15 @@ export function ScreeningWizard() {
           variant="ghost"
           size="icon"
           onClick={goBack}
-          aria-label="ย้อนกลับ"
+          aria-label={t('screening.back')}
           className="shrink-0 mt-1 border border-line bg-surface"
         >
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <PageHero
           className="mb-0 flex-1"
-          title="เริ่มการคัดกรอง"
-          subtitle="เลือกข้อมูลสิ่งแวดล้อม บันทึกเสียงหายใจ/ไอ แล้วส่งวิเคราะห์ด้วย BreathPrint AI"
+          title={t('screening.title')}
+          subtitle={t('screening.subtitle')}
         />
       </div>
 
@@ -133,7 +137,7 @@ export function ScreeningWizard() {
 
       <SurfacePanel className="min-h-[420px] lg:min-h-[480px]">
         <p className="section-label mb-1">
-          ขั้นตอน {stepIndex + 1} / {WIZARD_STEPS.length}
+          {t('screening.stepOf', { n: stepIndex + 1, total: WIZARD_STEPS.length })}
         </p>
 
         {store.step === 'location' && (
@@ -156,8 +160,8 @@ export function ScreeningWizard() {
 
         {store.step === 'breath' && (
           <AudioRecorder
-            title="บันทึกเสียงหายใจ"
-            description="หายใจตามปกติ 10–15 วินาที ในที่เงียบ · วางไมค์ห่างจากปาก 15–20 ซม."
+            title={t('screening.breathTitle')}
+            description={t('screening.breathDescription')}
             minDuration={8}
             maxDuration={15}
             onComplete={(blob, duration, qualityOk) => {
@@ -169,8 +173,8 @@ export function ScreeningWizard() {
 
         {store.step === 'cough' && (
           <AudioRecorder
-            title="บันทึกเสียงไอ"
-            description="ไอ 3–5 ครั้งตามธรรมชาติ"
+            title={t('screening.coughTitle')}
+            description={t('screening.coughDescription')}
             minDuration={3}
             maxDuration={10}
             onComplete={(blob, duration, qualityOk) => {

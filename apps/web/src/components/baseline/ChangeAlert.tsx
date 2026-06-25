@@ -1,5 +1,6 @@
 import { TrendingUp, TrendingDown, Minus } from 'lucide-react'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useT } from '@/i18n'
 
 interface ChangeAlertProps {
   currentScore: number
@@ -8,12 +9,12 @@ interface ChangeAlertProps {
 }
 
 export function ChangeAlert({ currentScore, baselineScore, exposureDelta }: ChangeAlertProps) {
+  const { t } = useT()
   if (baselineScore === null) {
     return (
       <Card className="bg-soft border-brand/20">
         <CardDescription>
-          นี่คือการคัดกรองครั้งแรก — ระบบจะสร้าง Personalized Acoustic Baseline
-          สำหรับเปรียบเทียบในอนาคต
+          {t('result.firstScreening')}
         </CardDescription>
       </Card>
     )
@@ -42,12 +43,15 @@ export function ChangeAlert({ currentScore, baselineScore, exposureDelta }: Chan
           ) : (
             <Minus className="h-5 w-5 text-muted" />
           )}
-          เทียบ Baseline ส่วนตัว
+          {t('result.compareBaselineTitle')}
         </CardTitle>
       </CardHeader>
       <div className="text-sm text-sub space-y-1">
         <p>
-          Risk Score: {currentScore} (baseline เฉลี่ย {Math.round(baselineScore)})
+          {t('result.riskScoreVsBaseline', {
+            current: currentScore,
+            baseline: Math.round(baselineScore),
+          })}
           {scoreDelta !== 0 && (
             <span className={isWorse ? 'text-accent font-bold' : 'text-good font-bold'}>
               {' '}
@@ -58,13 +62,14 @@ export function ChangeAlert({ currentScore, baselineScore, exposureDelta }: Chan
         </p>
         {exposureDelta !== null && (
           <p>
-            Exposure Dose: {exposureDelta >= 0 ? '+' : ''}
-            {exposureDelta}% เทียบ baseline
+            {t('result.exposureVsBaseline', {
+              delta: `${exposureDelta >= 0 ? '+' : ''}${exposureDelta}`,
+            })}
           </p>
         )}
         {isWorse && (
           <p className="text-accent font-medium mt-2">
-            แนะนำคัดกรองซ้ำเร็วขึ้นและปรึกษาแพทย์หากมีอาการเพิ่ม
+            {t('result.worseAdvice')}
           </p>
         )}
       </div>

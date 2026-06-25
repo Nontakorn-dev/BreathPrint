@@ -1,10 +1,12 @@
 import { useState } from 'react'
+import { useT } from '@/i18n'
 import { Button } from '@/components/ui/Button'
 import { Checkbox } from '@/components/ui/Checkbox'
 import { DisclaimerBanner } from '@/components/results/DisclaimerBanner'
+import type { ConsentDecision } from '@/types'
 
 interface ConsentScreenProps {
-  onAccept: () => void
+  onAccept: (consent: ConsentDecision) => void
 }
 
 export function ConsentScreen({ onAccept }: ConsentScreenProps) {
@@ -13,43 +15,45 @@ export function ConsentScreen({ onAccept }: ConsentScreenProps) {
   const [consentAudio, setConsentAudio] = useState(false)
 
   const canProceed = consentResearch && consentPdpa && consentAudio
+  const { t } = useT()
 
   return (
     <div className="space-y-5">
       <DisclaimerBanner compact />
 
       <div className="space-y-4">
-        <p className="text-sm text-sub">
-          ข้อมูลเสียง ตำแหน่ง GPS (snapshot) และประวัติสุขภาพจะถูกเก็บเพื่อการคัดกรอง
-          และวิจัยทางคลินิก ตามมาตรฐาน IRB มหาวิทยาลัยมหิดล
-        </p>
+        <p className="text-sm text-sub">{t('onboarding.consent.dataNote')}</p>
         <Checkbox
           id="consent-research"
           checked={consentResearch}
           onChange={(e) => setConsentResearch(e.target.checked)}
-          label="ข้าพเจ้ายินยอมให้เก็บข้อมูลเพื่อการคัดกรองและวิจัย โดยเข้าใจว่านี่เป็นเครื่องมือคัดกรอง ไม่ใช่การวินิจฉัย"
+          label={t('onboarding.consent.research')}
         />
         <Checkbox
           id="consent-pdpa"
           checked={consentPdpa}
           onChange={(e) => setConsentPdpa(e.target.checked)}
-          label="ข้าพเจ้ายินยอมตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล (PDPA) และทราบสิทธิในการเพิกถอนความยินยอมหรือขอลบข้อมูลได้ทุกเมื่อ"
+          label={t('onboarding.consent.pdpa')}
         />
         <Checkbox
           id="consent-audio"
           checked={consentAudio}
           onChange={(e) => setConsentAudio(e.target.checked)}
-          label="ข้าพเจ้ายินยอมให้บันทึกเสียงหายใจและเสียงไอผ่านไมโครโฟนมือถือ โดยข้อมูลจะถูกเข้ารหัสและใช้เฉพาะเพื่อการวิเคราะห์"
+          label={t('onboarding.consent.audio')}
         />
       </div>
 
       <p className="text-xs text-muted rounded-xl bg-panel px-4 py-3">
-        <strong className="text-ink">Data minimization:</strong> เก็บ GPS เฉพาะตอนคัดกรอง
-        ไม่ติดตามตำแหน่งตลอดเวลา ข้อมูลเข้ารหัสระหว่างส่งและจัดเก็บ
+        <strong className="text-ink">Data minimization:</strong> {t('onboarding.consent.minimization')}
       </p>
 
-      <Button fullWidth disabled={!canProceed} onClick={onAccept} size="lg">
-        ยอมรับและดำเนินการต่อ
+      <Button
+        fullWidth
+        disabled={!canProceed}
+        onClick={() => onAccept({ consentResearch, consentPdpa, consentAudio })}
+        size="lg"
+      >
+        {t('onboarding.consent.accept')}
       </Button>
     </div>
   )

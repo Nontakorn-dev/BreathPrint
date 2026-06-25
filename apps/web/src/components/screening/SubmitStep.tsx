@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/Button'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { ProgressBar } from '@/components/ui/Progress'
 import { formatExposureDose } from '@/lib/exposure'
+import { useT } from '@/i18n'
 import type { SymptomScores } from '@/types'
 
 interface SubmitStepProps {
@@ -30,27 +31,28 @@ export function SubmitStep({
   isOffline,
   onSubmit,
 }: SubmitStepProps) {
+  const { t } = useT()
   const symptomTotal = Object.values(symptoms).reduce((a, b) => a + b, 0)
 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink font-display">สรุปและส่งวิเคราะห์</h2>
-        <p className="text-sub text-sm mt-1">ตรวจสอบข้อมูลก่อนส่งไปวิเคราะห์</p>
+        <h2 className="text-xl font-bold text-ink font-display">{t('screening.submit.title')}</h2>
+        <p className="text-sub text-sm mt-1">{t('screening.submit.subtitle')}</p>
       </div>
 
       {isOffline && (
         <Card className="border-warn/30 bg-[#fff7e8]">
           <div className="flex items-center gap-2 text-warn">
             <WifiOff className="h-5 w-5" />
-            <p className="text-sm font-medium">ออฟไลน์ — จะบันทึกและ sync เมื่อกลับมาออนไลน์</p>
+            <p className="text-sm font-medium">{t('screening.submit.offlineNote')}</p>
           </div>
         </Card>
       )}
 
       <Card>
         <CardHeader>
-          <CardTitle>ข้อมูลที่จะส่ง</CardTitle>
+          <CardTitle>{t('screening.submit.dataToSend')}</CardTitle>
         </CardHeader>
         <dl className="space-y-2 text-sm">
           <div className="flex justify-between">
@@ -62,19 +64,19 @@ export function SubmitStep({
             <dd className="font-medium text-ink">{formatExposureDose(exposureDose)}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-sub">คะแนนอาการรวม</dt>
-            <dd className="font-medium text-ink">{symptomTotal} / 20</dd>
+            <dt className="text-sub">{t('screening.submit.symptomTotal')}</dt>
+            <dd className="font-medium text-ink">{t('screening.submit.symptomTotalValue', { total: symptomTotal })}</dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-sub">เสียงหายใจ</dt>
+            <dt className="text-sub">{t('screening.submit.breath')}</dt>
             <dd className={hasBreath ? 'text-good font-medium' : 'text-bad'}>
-              {hasBreath ? '✓ พร้อม' : '✗ ยังไม่บันทึก'}
+              {hasBreath ? t('screening.submit.ready') : t('screening.submit.notRecorded')}
             </dd>
           </div>
           <div className="flex justify-between">
-            <dt className="text-sub">เสียงไอ</dt>
+            <dt className="text-sub">{t('screening.submit.cough')}</dt>
             <dd className={hasCough ? 'text-good font-medium' : 'text-bad'}>
-              {hasCough ? '✓ พร้อม' : '✗ ยังไม่บันทึก'}
+              {hasCough ? t('screening.submit.ready') : t('screening.submit.notRecorded')}
             </dd>
           </div>
           {pefValue && (
@@ -90,11 +92,11 @@ export function SubmitStep({
         <Card>
           <CardDescription className="flex items-center gap-2 mb-3">
             <Loader2 className="h-4 w-4 animate-spin text-brand" />
-            กำลังวิเคราะห์ด้วย BreathPrint AI...
+            {t('screening.submit.analyzing')}
           </CardDescription>
           <ProgressBar value={progress} />
           <p className="text-xs text-muted mt-2">
-            audio-LLM กำลังประมวลผลเสียงและข้อมูล exposure
+            {t('screening.submit.analyzingDetail')}
           </p>
         </Card>
       )}
@@ -108,24 +110,24 @@ export function SubmitStep({
         {isSubmitting ? (
           <>
             <Loader2 className="h-5 w-5 animate-spin" />
-            กำลังวิเคราะห์...
+            {t('screening.submit.buttonAnalyzing')}
           </>
         ) : isOffline ? (
           <>
             <WifiOff className="h-5 w-5" />
-            บันทึกออฟไลน์
+            {t('screening.submit.buttonOffline')}
           </>
         ) : (
           <>
             <Upload className="h-5 w-5" />
-            ส่งวิเคราะห์
+            {t('screening.submit.buttonSubmit')}
           </>
         )}
       </Button>
 
       {!isOffline && (
         <p className="text-xs text-center text-muted flex items-center justify-center gap-1">
-          <Wifi className="h-3 w-3" /> เชื่อมต่อออนไลน์
+          <Wifi className="h-3 w-3" /> {t('screening.submit.onlineStatus')}
         </p>
       )}
     </div>

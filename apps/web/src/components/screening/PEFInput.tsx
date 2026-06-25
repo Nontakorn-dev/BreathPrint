@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Button } from '@/components/ui/Button'
 import { Input } from '@/components/ui/Input'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useT } from '@/i18n'
 
 interface PEFInputProps {
   value: number | undefined
@@ -11,6 +12,7 @@ interface PEFInputProps {
 }
 
 export function PEFInput({ value, onChange, onComplete, onSkip }: PEFInputProps) {
+  const { t } = useT()
   const [input, setInput] = useState(value?.toString() ?? '')
 
   const handleContinue = () => {
@@ -26,21 +28,21 @@ export function PEFInput({ value, onChange, onComplete, onSkip }: PEFInputProps)
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-xl font-bold text-ink font-display">Peak Expiratory Flow (PEF)</h2>
-        <p className="text-sub text-sm mt-1">ไม่บังคับ — กรอกหากมีเครื่องวัดที่บ้าน</p>
+        <h2 className="text-xl font-bold text-ink font-display">{t('screening.pef.title')}</h2>
+        <p className="text-sub text-sm mt-1">{t('screening.pef.subtitle')}</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>ค่า PEF (ลิตร/นาที)</CardTitle>
+          <CardTitle>{t('screening.pef.cardTitle')}</CardTitle>
           <CardDescription>
-            เป่าเต็มแรง 3 ครั้ง ใช้ค่าสูงสุด ค่าปกติผู้ใหญ่ ~400–600 L/min
+            {t('screening.pef.cardDesc')}
           </CardDescription>
         </CardHeader>
         <Input
           id="pef"
           type="number"
-          placeholder="เช่น 420"
+          placeholder={t('screening.pef.placeholder')}
           value={input}
           onChange={(e) => setInput(e.target.value)}
         />
@@ -48,10 +50,10 @@ export function PEFInput({ value, onChange, onComplete, onSkip }: PEFInputProps)
 
       <div className="flex flex-col gap-3">
         <Button fullWidth size="lg" onClick={handleContinue}>
-          {input ? 'บันทึกและดำเนินการต่อ' : 'ดำเนินการต่อ'}
+          {input ? t('screening.pef.saveAndContinue') : t('screening.pef.continue')}
         </Button>
         <Button fullWidth variant="ghost" onClick={onSkip}>
-          ข้ามขั้นตอนนี้
+          {t('screening.pef.skip')}
         </Button>
       </div>
     </div>

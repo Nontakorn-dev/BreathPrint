@@ -1,0 +1,36 @@
+import type { Bundle } from '../types'
+
+export const settings: Bundle = {
+  th: {
+    'title': 'ตั้งค่าและความเป็นส่วนตัว',
+    'subtitle': 'จัดการข้อมูลส่วนบุคคลตาม PDPA',
+    'accountLabel': 'บัญชี',
+    'profileTitle': 'โปรไฟล์',
+    'age': 'อายุ',
+    'ageUnit': 'ปี',
+    'device': 'อุปกรณ์',
+    'consentedAt': 'ยินยอมเมื่อ',
+    'pdpaLabel': 'PDPA',
+    'rightsTitle': 'สิทธิของคุณ',
+    'rightsDesc': 'คุณมีสิทธิขอสำเนาและลบข้อมูลส่วนบุคคลตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล',
+    'export': 'ส่งออกข้อมูล (JSON)',
+    'deleteAll': 'ลบข้อมูลทั้งหมด',
+    'deleteConfirm': 'ยืนยันการลบข้อมูลทั้งหมด? การดำเนินการนี้ไม่สามารถย้อนกลับได้ (สิทธิตาม PDPA)',
+  },
+  en: {
+    'title': 'Settings & Privacy',
+    'subtitle': 'Manage your personal data under PDPA',
+    'accountLabel': 'Account',
+    'profileTitle': 'Profile',
+    'age': 'Age',
+    'ageUnit': 'years',
+    'device': 'Device',
+    'consentedAt': 'Consented on',
+    'pdpaLabel': 'PDPA',
+    'rightsTitle': 'Your rights',
+    'rightsDesc': 'You have the right to request a copy and delete your personal data under the Personal Data Protection Act.',
+    'export': 'Export data (JSON)',
+    'deleteAll': 'Delete all data',
+    'deleteConfirm': 'Confirm deleting all data? This action cannot be undone (rights under PDPA)',
+  },
+}

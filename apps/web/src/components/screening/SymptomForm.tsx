@@ -1,24 +1,7 @@
 import { Button } from '@/components/ui/Button'
+import { useT } from '@/i18n'
 import type { SymptomScores } from '@/types'
 import { cn } from '@/lib/utils'
-
-const SYMPTOM_ITEMS: {
-  key: keyof SymptomScores
-  label: string
-  description: string
-}[] = [
-  { key: 'cough', label: 'ไอ', description: 'ไอเรื้อรังหรือไอบ่อย' },
-  { key: 'chestPain', label: 'เจ็บหน้าอก', description: 'แน่นหน้าอกหรือเจ็บเมื่อหายใจ' },
-  {
-    key: 'shortnessOfBreath',
-    label: 'หายใจลำบาก',
-    description: 'หอบเหนื่อยง่ายกว่าปกติ',
-  },
-  { key: 'wheeze', label: 'หวีดเสียง', description: 'ได้ยินเสียงหวีดตอนหายใจ' },
-  { key: 'fatigue', label: 'อ่อนเพลีย', description: 'เหนื่อยล้าไม่สมเหตุสมผล' },
-]
-
-const SCALE_LABELS = ['ไม่มี', 'เล็กน้อย', 'ปานกลาง', 'ค่อนข้างมาก', 'มาก']
 
 interface SymptomFormProps {
   values: SymptomScores
@@ -27,6 +10,32 @@ interface SymptomFormProps {
 }
 
 export function SymptomForm({ values, onChange, onComplete }: SymptomFormProps) {
+  const { t } = useT()
+
+  const SYMPTOM_ITEMS: {
+    key: keyof SymptomScores
+    label: string
+    description: string
+  }[] = [
+    { key: 'cough', label: t('screening.symptom.cough.label'), description: t('screening.symptom.cough.desc') },
+    { key: 'chestPain', label: t('screening.symptom.chestPain.label'), description: t('screening.symptom.chestPain.desc') },
+    {
+      key: 'shortnessOfBreath',
+      label: t('screening.symptom.shortnessOfBreath.label'),
+      description: t('screening.symptom.shortnessOfBreath.desc'),
+    },
+    { key: 'wheeze', label: t('screening.symptom.wheeze.label'), description: t('screening.symptom.wheeze.desc') },
+    { key: 'fatigue', label: t('screening.symptom.fatigue.label'), description: t('screening.symptom.fatigue.desc') },
+  ]
+
+  const SCALE_LABELS = [
+    t('screening.symptom.scale.0'),
+    t('screening.symptom.scale.1'),
+    t('screening.symptom.scale.2'),
+    t('screening.symptom.scale.3'),
+    t('screening.symptom.scale.4'),
+  ]
+
   const setScore = (key: keyof SymptomScores, score: number) => {
     onChange({ ...values, [key]: score })
   }
@@ -34,9 +43,9 @@ export function SymptomForm({ values, onChange, onComplete }: SymptomFormProps) 
   return (
     <div className="space-y-5">
       <div>
-        <h2 className="text-lg font-bold text-ink font-display">แบบสอบถามอาการ</h2>
+        <h2 className="text-lg font-bold text-ink font-display">{t('screening.symptom.title')}</h2>
         <p className="text-muted text-sm mt-1">
-          ประเมินอาการทางเดินหายใจในช่วง 2 สัปดาห์ที่ผ่านมา (0–4)
+          {t('screening.symptom.subtitle')}
         </p>
       </div>
 
@@ -75,7 +84,7 @@ export function SymptomForm({ values, onChange, onComplete }: SymptomFormProps) 
       </div>
 
       <Button fullWidth size="lg" onClick={onComplete}>
-        ดำเนินการต่อ
+        {t('screening.symptom.continue')}
       </Button>
     </div>
   )

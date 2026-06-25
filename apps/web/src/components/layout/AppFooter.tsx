@@ -1,7 +1,10 @@
 import { Link } from 'react-router-dom'
 import { CONTENT_CLASS } from '@/components/layout/PageContainer'
+import { useT } from '@/i18n'
 
 export function AppFooter() {
+  const { t } = useT()
+
   return (
     <footer className="mt-auto border-t border-line/80 bg-surface/60 backdrop-blur-sm">
       <div className={CONTENT_CLASS}>
@@ -9,37 +12,36 @@ export function AppFooter() {
           <div className="col-span-2 sm:col-span-1">
             <p className="font-extrabold text-brand font-display text-base mb-2">BreathPrint</p>
             <p className="text-muted text-xs leading-relaxed max-w-[220px]">
-              แพลตฟอร์ม AI คัดกรอง Small Airway Dysfunction จากเสียงหายใจและ PM2.5
+              {t('nav.footerTagline')}
             </p>
           </div>
           <div>
-            <p className="font-bold text-ink mb-3 text-xs uppercase tracking-wide">ผลิตภัณฑ์</p>
+            <p className="font-bold text-ink mb-3 text-xs uppercase tracking-wide">{t('nav.footerProducts')}</p>
             <ul className="space-y-2 text-muted text-xs">
-              <li><Link to="/screening" className="hover:text-brand transition-colors">เริ่มคัดกรอง</Link></li>
-              <li><Link to="/history" className="hover:text-brand transition-colors">ประวัติ</Link></li>
+              <li><Link to="/screening" className="hover:text-brand transition-colors">{t('nav.startScreening')}</Link></li>
+              <li><Link to="/history" className="hover:text-brand transition-colors">{t('nav.history')}</Link></li>
             </ul>
           </div>
           <div>
-            <p className="font-bold text-ink mb-3 text-xs uppercase tracking-wide">บัญชี</p>
+            <p className="font-bold text-ink mb-3 text-xs uppercase tracking-wide">{t('nav.footerAccount')}</p>
             <ul className="space-y-2 text-muted text-xs">
-              <li><Link to="/settings" className="hover:text-brand transition-colors">ตั้งค่า</Link></li>
-              <li><Link to="/onboarding" className="hover:text-brand transition-colors">เข้าสู่ระบบ</Link></li>
+              <li><Link to="/settings" className="hover:text-brand transition-colors">{t('nav.settings')}</Link></li>
+              <li><Link to="/onboarding" className="hover:text-brand transition-colors">{t('nav.footerLogin')}</Link></li>
             </ul>
           </div>
           <div>
-            <p className="font-bold text-ink mb-3 text-xs uppercase tracking-wide">ข้อกำหนด</p>
+            <p className="font-bold text-ink mb-3 text-xs uppercase tracking-wide">{t('nav.footerLegal')}</p>
             <ul className="space-y-2 text-muted text-xs">
-              <li><span>คัดกรอง ไม่ใช่วินิจฉัย</span></li>
-              <li><span>PDPA / IRB ready</span></li>
+              <li><span>{t('nav.footerNotDiagnosis')}</span></li>
+              <li><span>{t('nav.footerPdpa')}</span></li>
             </ul>
           </div>
         </div>
         <div className="border-t border-line py-5 text-center text-xs text-muted">
           <p>
-            <strong className="text-sub">Medical disclaimer ·</strong> BreathPrint เป็นเครื่องมือคัดกรองเบื้องต้น
-            ไม่ใช่อุปกรณ์วินิจฉัยทางการแพทย์
+            <strong className="text-sub">{t('nav.footerDisclaimerLabel')}</strong> {t('nav.footerDisclaimer')}
           </p>
-          <p className="mt-1">© {new Date().getFullYear()} BreathPrint · Acoustic SAD screening · Northern Thailand PM2.5</p>
+          <p className="mt-1">{t('nav.footerCopyright', { year: new Date().getFullYear() })}</p>
         </div>
       </div>
     </footer>

@@ -1,4 +1,5 @@
 import { Card, CardHeader, CardTitle } from '@/components/ui/Card'
+import { useT } from '@/i18n'
 import type { TimeEvent } from '@/types'
 
 interface ExplanationPanelProps {
@@ -7,11 +8,12 @@ interface ExplanationPanelProps {
 }
 
 export function ExplanationPanel({ bullets, timeEvents }: ExplanationPanelProps) {
+  const { t } = useT()
   return (
     <Card className="bg-panel border-brand2/20">
       <CardHeader>
         <CardTitle className="text-brand2 text-base">
-          คำอธิบาย (audio-LLM)
+          {t('result.explanationTitle')}
         </CardTitle>
       </CardHeader>
       <ul className="space-y-2">
@@ -25,7 +27,7 @@ export function ExplanationPanel({ bullets, timeEvents }: ExplanationPanelProps)
 
       {timeEvents.length > 0 && (
         <div className="mt-4 pt-4 border-t border-line">
-          <p className="text-xs font-bold text-brand2 mb-2">Time-grounding</p>
+          <p className="text-xs font-bold text-brand2 mb-2">{t('result.timeGrounding')}</p>
           <div className="space-y-1.5">
             {timeEvents.map((ev, i) => (
               <div

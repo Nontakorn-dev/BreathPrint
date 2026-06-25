@@ -12,6 +12,17 @@ export interface UserProfile {
   deviceModel: string
   consentAt: string
   createdAt: string
+  /** Which consents were granted (persisted for PDPA/IRB audit, not just a timestamp). */
+  consentResearch?: boolean
+  consentPdpa?: boolean
+  consentAudio?: boolean
+}
+
+/** The three IRB/PDPA consent decisions collected on the consent screen. */
+export interface ConsentDecision {
+  consentResearch: boolean
+  consentPdpa: boolean
+  consentAudio: boolean
 }
 
 export interface SymptomScores {
@@ -39,6 +50,8 @@ export interface ScreeningResult {
   id: string
   screeningId: string
   riskScore: number
+  /** Model confidence 0..1 (GallopGuard principle: every report carries confidence). */
+  confidence: number
   riskBand: RiskBand
   explanationBullets: string[]
   timeEvents: TimeEvent[]
@@ -53,6 +66,9 @@ export interface ScreeningSession {
   userId: string
   breathAudioBlob?: Blob
   coughAudioBlob?: Blob
+  /** Recorded durations in seconds (fed into the inference pipeline). */
+  breathDuration?: number
+  coughDuration?: number
   breathAudioUrl?: string
   coughAudioUrl?: string
   lat?: number
@@ -86,10 +102,17 @@ export interface InferenceRequest {
   smokingStatus: SmokingStatus
   baselineAvgRisk?: number
   baselineAvgExposure?: number
+  /** Recorded audio blobs + durations, fed into the staged pipeline. */
+  breathAudio?: Blob
+  coughAudio?: Blob
+  breathDuration?: number
+  coughDuration?: number
 }
 
 export interface InferenceResponse {
   riskScore: number
+  /** Model confidence 0..1. */
+  confidence: number
   riskBand: RiskBand
   explanationBullets: string[]
   timeEvents: TimeEvent[]

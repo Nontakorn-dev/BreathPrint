@@ -6,8 +6,10 @@ import { PageHero, SurfacePanel } from '@/components/layout/PageContainer'
 import { DisclaimerBanner } from '@/components/results/DisclaimerBanner'
 import { useAuthStore } from '@/store/auth-store'
 import { getUserScreenings } from '@/lib/storage'
+import { useT } from '@/i18n'
 
 export function SettingsPage() {
+  const { t } = useT()
   const profile = useAuthStore((s) => s.profile)
   const clearAuth = useAuthStore((s) => s.clearAuth)
   const navigate = useNavigate()
@@ -33,7 +35,7 @@ export function SettingsPage() {
   const handleDelete = () => {
     if (
       confirm(
-        'ยืนยันการลบข้อมูลทั้งหมด? การดำเนินการนี้ไม่สามารถย้อนกลับได้ (สิทธิตาม PDPA)',
+        t('settings.deleteConfirm'),
       )
     ) {
       localStorage.clear()
@@ -45,25 +47,25 @@ export function SettingsPage() {
 
   return (
     <div className="space-y-6 lg:space-y-8">
-      <PageHero title="ตั้งค่าและความเป็นส่วนตัว" subtitle="จัดการข้อมูลส่วนบุคคลตาม PDPA" />
+      <PageHero title={t('settings.title')} subtitle={t('settings.subtitle')} />
       <DisclaimerBanner compact />
 
       <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
         {profile && (
           <SurfacePanel>
-            <p className="section-label mb-1">บัญชี</p>
-            <h3 className="text-lg font-bold text-ink mb-5">โปรไฟล์</h3>
+            <p className="section-label mb-1">{t('settings.accountLabel')}</p>
+            <h3 className="text-lg font-bold text-ink mb-5">{t('settings.profileTitle')}</h3>
             <dl className="text-sm space-y-0">
               <div className="flex justify-between py-3.5 border-b border-line">
-                <dt className="text-muted">อายุ</dt>
-                <dd className="font-semibold">{profile.age} ปี</dd>
+                <dt className="text-muted">{t('settings.age')}</dt>
+                <dd className="font-semibold">{profile.age} {t('settings.ageUnit')}</dd>
               </div>
               <div className="flex justify-between py-3.5 border-b border-line">
-                <dt className="text-muted">อุปกรณ์</dt>
+                <dt className="text-muted">{t('settings.device')}</dt>
                 <dd className="font-semibold">{profile.deviceModel}</dd>
               </div>
               <div className="flex justify-between py-3.5">
-                <dt className="text-muted">ยินยอมเมื่อ</dt>
+                <dt className="text-muted">{t('settings.consentedAt')}</dt>
                 <dd className="font-semibold">
                   {new Date(profile.consentAt).toLocaleDateString('th-TH')}
                 </dd>
@@ -73,19 +75,19 @@ export function SettingsPage() {
         )}
 
         <SurfacePanel>
-          <p className="section-label mb-1">PDPA</p>
-          <h3 className="text-lg font-bold text-ink mb-2">สิทธิของคุณ</h3>
+          <p className="section-label mb-1">{t('settings.pdpaLabel')}</p>
+          <h3 className="text-lg font-bold text-ink mb-2">{t('settings.rightsTitle')}</h3>
           <p className="text-sm text-muted mb-6">
-            คุณมีสิทธิขอสำเนาและลบข้อมูลส่วนบุคคลตาม พ.ร.บ. คุ้มครองข้อมูลส่วนบุคคล
+            {t('settings.rightsDesc')}
           </p>
           <div className="flex flex-col gap-3">
             <Button variant="outline" fullWidth onClick={handleExport} disabled={exporting}>
               <Download className="h-4 w-4" />
-              ส่งออกข้อมูล (JSON)
+              {t('settings.export')}
             </Button>
             <Button variant="danger" fullWidth onClick={handleDelete}>
               <Trash2 className="h-4 w-4" />
-              ลบข้อมูลทั้งหมด
+              {t('settings.deleteAll')}
             </Button>
           </div>
         </SurfacePanel>

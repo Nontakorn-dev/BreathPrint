@@ -1,4 +1,5 @@
 import { getRiskBandColor, getRiskBandLabel } from '@/lib/utils'
+import { useT } from '@/i18n'
 import type { RiskBand } from '@/types'
 
 interface RiskScoreGaugeProps {
@@ -7,12 +8,13 @@ interface RiskScoreGaugeProps {
 }
 
 export function RiskScoreGauge({ score, band }: RiskScoreGaugeProps) {
+  const { t } = useT()
   const pointerPct = Math.min(100, Math.max(0, score))
 
   return (
     <div className="space-y-4">
       <div className="text-center">
-        <p className="text-sm font-medium text-sub">BreathPrint Risk Score</p>
+        <p className="text-sm font-medium text-sub">{t('result.riskScoreLabel')}</p>
         <p className="text-5xl lg:text-6xl font-extrabold text-ink font-display mt-1">{score}</p>
         <p
           className="text-sm font-bold mt-1"
@@ -38,10 +40,10 @@ export function RiskScoreGauge({ score, band }: RiskScoreGaugeProps) {
           <span>100</span>
         </div>
         <div className="flex justify-between text-[11px] font-medium mt-1">
-          <span className="text-good">ต่ำ</span>
-          <span className="text-warn">ปานกลาง</span>
-          <span className="text-accent">สูง</span>
-          <span className="text-bad">สูงมาก</span>
+          <span className="text-good">{t('result.bandLow')}</span>
+          <span className="text-warn">{t('result.bandModerate')}</span>
+          <span className="text-accent">{t('result.bandHigh')}</span>
+          <span className="text-bad">{t('result.bandVeryHigh')}</span>
         </div>
       </div>
     </div>

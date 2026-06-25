@@ -1,24 +1,29 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useT } from '@/i18n'
 import { ConsentScreen } from '@/components/consent/ConsentScreen'
 import { ProfileForm } from '@/components/profile/ProfileForm'
 import { Logo } from '@/components/brand/Logo'
 import { AppFooter } from '@/components/layout/AppFooter'
 import { PageContainer, PageMain, SurfacePanel, PageHero } from '@/components/layout/PageContainer'
-import { ensureAuth } from '@/lib/supabase'
+import { ensureAuth, upsertProfile, isSupabaseConfigured } from '@/lib/supabase'
 import { saveProfile } from '@/lib/storage'
 import { useAuthStore } from '@/store/auth-store'
+import type { ConsentDecision } from '@/types'
 
 type OnboardingStep = 'consent' | 'profile'
 
 export function OnboardingPage() {
   const [step, setStep] = useState<OnboardingStep>('consent')
   const [userId, setUserId] = useState<string | null>(null)
+  const [consent, setConsent] = useState<ConsentDecision | null>(null)
   const navigate = useNavigate()
   const setAuthUserId = useAuthStore((s) => s.setUserId)
   const setProfile = useAuthStore((s) => s.setProfile)
+  const { t } = useT()
 
-  const handleConsent = async () => {
+  const handleConsent = async (c: ConsentDecision) => {
+    setConsent(c)
     const id = await ensureAuth()
     setUserId(id)
     setAuthUserId(id)
@@ -28,6 +33,13 @@ export function OnboardingPage() {
   const handleProfile = async (profile: Parameters<typeof saveProfile>[0]) => {
     await saveProfile(profile)
     setProfile(profile)
+    if (isSupabaseConfigured) {
+      try {
+        await upsertProfile(profile)
+      } catch {
+        // non-fatal; will sync later from the first screening
+      }
+    }
     navigate('/')
   }
 
@@ -40,17 +52,17 @@ export function OnboardingPage() {
       </header>
       <PageMain narrow>
         <PageHero
-          title={step === 'consent' ? 'เข้าสู่ระบบ' : 'ตั้งค่าโปรไฟล์'}
+          title={step === 'consent' ? t('onboarding.hero.consent.title') : t('onboarding.hero.profile.title')}
           subtitle={
             step === 'consent'
-              ? 'เข้าสู่แดชบอร์ด BreathPrint ของคุณ'
-              : 'ข้อมูลสุขภาพพื้นฐานสำหรับการคัดกรอง'
+              ? t('onboarding.hero.consent.subtitle')
+              : t('onboarding.hero.profile.subtitle')
           }
         />
         <SurfacePanel>
           {step === 'consent' && <ConsentScreen onAccept={handleConsent} />}
           {step === 'profile' && userId && (
-            <ProfileForm userId={userId} onSubmit={handleProfile} />
+            <ProfileForm userId={userId} consent={consent ?? undefined} onSubmit={handleProfile} />
           )}
         </SurfacePanel>
       </PageMain>

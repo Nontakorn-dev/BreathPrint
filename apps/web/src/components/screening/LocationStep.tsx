@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/Button'
 import { useGeolocation } from '@/hooks/useGeolocation'
 import { useAqi } from '@/hooks/useAqi'
 import { calculateWeeklyExposureDose, formatExposureDose } from '@/lib/exposure'
+import { useT } from '@/i18n'
 import type { LocationData } from '@/types'
 
 interface LocationStepProps {
@@ -11,6 +12,7 @@ interface LocationStepProps {
 }
 
 export function LocationStep({ onComplete }: LocationStepProps) {
+  const { t } = useT()
   const { position, loading: geoLoading, error: geoError, requestLocation } = useGeolocation()
   const { data: aqi, loading: aqiLoading, error: aqiError, fetchAqi } = useAqi()
 
@@ -37,9 +39,9 @@ export function LocationStep({ onComplete }: LocationStepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl lg:text-2xl font-bold text-ink font-display">ตำแหน่งและคุณภาพอากาศ</h2>
+        <h2 className="text-xl lg:text-2xl font-bold text-ink font-display">{t('screening.location.title')}</h2>
         <p className="text-sub text-sm mt-1.5">
-          ใช้ GPS snapshot เพื่อประเมิน Personal Exposure Dose ของ PM2.5
+          {t('screening.location.subtitle')}
         </p>
       </div>
 
@@ -47,19 +49,19 @@ export function LocationStep({ onComplete }: LocationStepProps) {
         <div className="rounded-2xl border border-line bg-panel/40 p-5 lg:p-6">
           <div className="flex items-center gap-2 mb-1">
             <MapPin className="h-5 w-5 text-brand" />
-            <p className="font-bold text-ink">ตำแหน่งปัจจุบัน</p>
+            <p className="font-bold text-ink">{t('screening.location.current')}</p>
           </div>
-          <p className="text-xs text-muted mb-4">เก็บเฉพาะตอนคัดกรอง ไม่ติดตามตลอดเวลา</p>
+          <p className="text-xs text-muted mb-4">{t('screening.location.privacyNote')}</p>
 
           {!position ? (
             <Button onClick={requestLocation} disabled={geoLoading} fullWidth>
               {geoLoading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  กำลังระบุตำแหน่ง...
+                  {t('screening.location.locating')}
                 </>
               ) : (
-                'อนุญาตการเข้าถึงตำแหน่ง'
+                t('screening.location.allow')
               )}
             </Button>
           ) : (
@@ -67,7 +69,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
               <p>
                 Lat: {position.lat.toFixed(4)}, Lng: {position.lng.toFixed(4)}
               </p>
-              <p>ความแม่นยำ: ±{Math.round(position.accuracy)} เมตร</p>
+              <p>{t('screening.location.accuracy', { m: Math.round(position.accuracy) })}</p>
               <span className="inline-flex h-2 w-2 rounded-full bg-good mt-2" />
             </div>
           )}
@@ -77,15 +79,15 @@ export function LocationStep({ onComplete }: LocationStepProps) {
         <div className="rounded-2xl border border-line bg-panel/40 p-5 lg:p-6">
           <div className="flex items-center gap-2 mb-4">
             <Wind className="h-5 w-5 text-brand2" />
-            <p className="font-bold text-ink">PM2.5 ปัจจุบัน</p>
+            <p className="font-bold text-ink">{t('screening.location.pm25Current')}</p>
           </div>
 
           {!position ? (
-            <p className="text-sm text-muted">รอตำแหน่ง GPS ก่อนดึงข้อมูล AQI</p>
+            <p className="text-sm text-muted">{t('screening.location.waitGps')}</p>
           ) : aqiLoading ? (
             <div className="flex items-center gap-2 text-sub">
               <Loader2 className="h-4 w-4 animate-spin" />
-              กำลังดึงข้อมูล AQI...
+              {t('screening.location.fetchingAqi')}
             </div>
           ) : aqi ? (
             <div>
@@ -93,17 +95,18 @@ export function LocationStep({ onComplete }: LocationStepProps) {
                 {aqi.pm25UgM3.toFixed(1)}
                 <span className="text-base font-medium text-muted ml-1">µg/m³</span>
               </p>
-              <p className="text-sm text-sub mt-2">แหล่งข้อมูล: {aqi.source}</p>
+              <p className="text-sm text-sub mt-2">{t('screening.location.source', { source: aqi.source })}</p>
               {aqi.isFallback && (
                 <p className="text-sm text-warn mt-2">
-                  ใช้ค่าเฉลี่ยจังหวัดเชียงใหม่ (42.6 µg/m³) เนื่องจากไม่มีสถานีใกล้เคียง
+                  {t('screening.location.fallback')}
                 </p>
               )}
               <p className="text-sm font-semibold text-ink mt-4 pt-4 border-t border-line">
-                Exposure Dose ประมาณ:{' '}
-                {formatExposureDose(
-                  calculateWeeklyExposureDose({ pm25UgM3: aqi.pm25UgM3 }).weeklyDose,
-                )}
+                {t('screening.location.exposureDose', {
+                  value: formatExposureDose(
+                    calculateWeeklyExposureDose({ pm25UgM3: aqi.pm25UgM3 }).weeklyDose,
+                  ),
+                })}
               </p>
             </div>
           ) : null}
@@ -112,7 +115,7 @@ export function LocationStep({ onComplete }: LocationStepProps) {
       </div>
 
       <Button fullWidth size="lg" disabled={!position || !aqi || loading} onClick={handleContinue}>
-        ดำเนินการต่อ
+        {t('screening.location.continue')}
       </Button>
     </div>
   )

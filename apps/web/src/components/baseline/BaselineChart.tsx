@@ -10,6 +10,7 @@ import {
 } from 'recharts'
 import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/Card'
 import { formatDate } from '@/lib/utils'
+import { useT } from '@/i18n'
 import type { ScreeningSession } from '@/types'
 
 interface BaselineChartProps {
@@ -17,6 +18,7 @@ interface BaselineChartProps {
 }
 
 export function BaselineChart({ sessions }: BaselineChartProps) {
+  const { t } = useT()
   const data = sessions
     .filter((s) => s.result)
     .reverse()
@@ -30,7 +32,7 @@ export function BaselineChart({ sessions }: BaselineChartProps) {
     return (
       <Card>
         <CardDescription>
-          ต้องมีอย่างน้อย 2 ครั้งเพื่อแสดงกราฟแนวโน้ม — คัดกรองซ้ำใน 1–3 เดือน
+          {t('result.chartNeedsTwo')}
         </CardDescription>
       </Card>
     )
@@ -39,8 +41,8 @@ export function BaselineChart({ sessions }: BaselineChartProps) {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="text-base">แนวโน้ม Baseline</CardTitle>
-        <CardDescription>Risk Score และ Exposure Dose ตามเวลา</CardDescription>
+        <CardTitle className="text-base">{t('result.baselineTrendTitle')}</CardTitle>
+        <CardDescription>{t('result.baselineTrendSubtitle')}</CardDescription>
       </CardHeader>
       <ResponsiveContainer width="100%" height={220}>
         <LineChart data={data} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
