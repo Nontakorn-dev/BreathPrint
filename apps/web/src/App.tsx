@@ -1,19 +1,36 @@
-import { useEffect } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { AppShell } from '@/components/layout/AppShell'
 import { HomePage } from '@/pages/HomePage'
-import { OnboardingPage } from '@/pages/OnboardingPage'
-import { ScreeningPage } from '@/pages/ScreeningPage'
-import { ResultPage } from '@/pages/ResultPage'
-import { HistoryPage } from '@/pages/HistoryPage'
-import { SettingsPage } from '@/pages/SettingsPage'
 import { useAuthStore } from '@/store/auth-store'
 import { ensureAuth } from '@/lib/supabase'
 import { getProfile } from '@/lib/storage'
 import { syncPendingUploads } from '@/lib/offline-queue'
 
+// Route-level code-splitting: each page (and recharts, via HistoryPage) loads on
+// demand, keeping the initial bundle small.
+const OnboardingPage = lazy(() =>
+  import('@/pages/OnboardingPage').then((m) => ({ default: m.OnboardingPage })),
+)
+const ScreeningPage = lazy(() =>
+  import('@/pages/ScreeningPage').then((m) => ({ default: m.ScreeningPage })),
+)
+const ResultPage = lazy(() => import('@/pages/ResultPage').then((m) => ({ default: m.ResultPage })))
+const HistoryPage = lazy(() =>
+  import('@/pages/HistoryPage').then((m) => ({ default: m.HistoryPage })),
+)
+const SettingsPage = lazy(() =>
+  import('@/pages/SettingsPage').then((m) => ({ default: m.SettingsPage })),
+)
+
 const queryClient = new QueryClient()
+
+const PageLoader = () => (
+  <div className="min-h-dvh flex items-center justify-center page-gradient">
+    <div className="h-10 w-10 rounded-full border-2 border-brand border-t-transparent animate-spin" />
+  </div>
+)
 
 function AuthBootstrap({ children }: { children: React.ReactNode }) {
   const { userId, isOnboarded, setUserId, setProfile } = useAuthStore()
@@ -54,23 +71,25 @@ export function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <BrowserRouter>
-        <Routes>
-          <Route path="/onboarding" element={<OnboardingPage />} />
-          <Route path="/results/:id" element={<ResultPage />} />
-          <Route
-            element={
-              <AuthBootstrap>
-                <AppShell />
-              </AuthBootstrap>
-            }
-          >
-            <Route path="/" element={<HomePage />} />
-            <Route path="/screening" element={<ScreeningPage />} />
-            <Route path="/history" element={<HistoryPage />} />
-            <Route path="/settings" element={<SettingsPage />} />
-          </Route>
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Routes>
+        <Suspense fallback={<PageLoader />}>
+          <Routes>
+            <Route path="/onboarding" element={<OnboardingPage />} />
+            <Route path="/results/:id" element={<ResultPage />} />
+            <Route
+              element={
+                <AuthBootstrap>
+                  <AppShell />
+                </AuthBootstrap>
+              }
+            >
+              <Route path="/" element={<HomePage />} />
+              <Route path="/screening" element={<ScreeningPage />} />
+              <Route path="/history" element={<HistoryPage />} />
+              <Route path="/settings" element={<SettingsPage />} />
+            </Route>
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Routes>
+        </Suspense>
       </BrowserRouter>
     </QueryClientProvider>
   )

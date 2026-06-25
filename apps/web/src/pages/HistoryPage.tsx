@@ -1,15 +1,19 @@
-import { useEffect, useState } from 'react'
+import { lazy, Suspense, useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { RefreshCw } from 'lucide-react'
 import { Button } from '@/components/ui/Button'
 import { PageHero, SurfacePanel } from '@/components/layout/PageContainer'
 import { ScreeningHistory } from '@/components/baseline/ScreeningHistory'
-import { BaselineChart } from '@/components/baseline/BaselineChart'
 import { useAuthStore } from '@/store/auth-store'
 import { getUserScreenings, getBaseline } from '@/lib/storage'
 import { syncPendingUploads } from '@/lib/offline-queue'
 import { useT } from '@/i18n'
 import type { ScreeningSession, UserBaseline } from '@/types'
+
+// recharts is heavy — load it only on the History page.
+const BaselineChart = lazy(() =>
+  import('@/components/baseline/BaselineChart').then((m) => ({ default: m.BaselineChart })),
+)
 
 export function HistoryPage() {
   const { t } = useT()
@@ -66,7 +70,9 @@ export function HistoryPage() {
 
       <div className="grid lg:grid-cols-12 gap-6 lg:gap-8">
         <div className="lg:col-span-8 space-y-6">
-          <BaselineChart sessions={sessions} />
+          <Suspense fallback={<div className="h-64 rounded-2xl bg-panel animate-pulse" />}>
+            <BaselineChart sessions={sessions} />
+          </Suspense>
           <ScreeningHistory sessions={sessions} />
         </div>
 

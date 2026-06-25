@@ -1,6 +1,7 @@
 import type { InferenceRequest, InferenceResponse, ReferralLevel, TimeEvent } from '@/types'
 import { getExposureDeltaPct } from '@/lib/exposure'
 import { getRiskBand } from '@/lib/utils'
+import { blobToWav } from '@/lib/audio-wav'
 
 const MODEL_VERSION = 'breathprint-mock-v2.0'
 const INFERENCE_API = import.meta.env.VITE_INFERENCE_API_URL as string | undefined
@@ -38,8 +39,9 @@ async function runRemoteInference(req: InferenceRequest): Promise<InferenceRespo
   // Strip Blob fields (they serialize to `{}`) — audio travels as multipart files.
   const { breathAudio: _b, coughAudio: _c, ...meta } = req
   form.append('metadata', JSON.stringify(meta))
-  if (req.breathAudio) form.append('breath_audio', req.breathAudio, 'breath.webm')
-  if (req.coughAudio) form.append('cough_audio', req.coughAudio, 'cough.webm')
+  // Convert webm → WAV so the backend decodes without ffmpeg.
+  if (req.breathAudio) form.append('breath_audio', await blobToWav(req.breathAudio), 'breath.wav')
+  if (req.coughAudio) form.append('cough_audio', await blobToWav(req.coughAudio), 'cough.wav')
 
   const res = await fetch(`${INFERENCE_API}/v1/analyze`, { method: 'POST', body: form })
   if (!res.ok) throw new Error('Inference API failed')
