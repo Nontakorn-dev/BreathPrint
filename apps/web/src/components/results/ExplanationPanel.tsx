@@ -5,9 +5,11 @@ import type { TimeEvent } from '@/types'
 interface ExplanationPanelProps {
   bullets: string[]
   timeEvents: TimeEvent[]
+  /** Phase 2 — audio-grounded LLM explanation. Shown above the bullets if present. */
+  llmExplanation?: string
 }
 
-export function ExplanationPanel({ bullets, timeEvents }: ExplanationPanelProps) {
+export function ExplanationPanel({ bullets, timeEvents, llmExplanation }: ExplanationPanelProps) {
   const { t } = useT()
   return (
     <Card className="bg-panel border-brand2/20">
@@ -16,6 +18,14 @@ export function ExplanationPanel({ bullets, timeEvents }: ExplanationPanelProps)
           {t('result.explanationTitle')}
         </CardTitle>
       </CardHeader>
+      {llmExplanation && (
+        <div className="mb-4 rounded-xl bg-brand/5 border border-brand/20 px-4 py-3">
+          <p className="text-[11px] font-bold text-brand uppercase tracking-wide mb-1">
+            {t('result.llmExplainLabel')}
+          </p>
+          <p className="text-sm text-ink leading-relaxed whitespace-pre-wrap">{llmExplanation}</p>
+        </div>
+      )}
       <ul className="space-y-2">
         {bullets.map((bullet, i) => (
           <li key={i} className="text-sm text-sub flex gap-2">

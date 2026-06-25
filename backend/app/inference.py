@@ -155,22 +155,48 @@ def analyze(
         )
 
     if encoder_out is not None:
-        model_version = f"breathprint-phase1-v1.0 (encoder+probe: {encoder_out['encoder'].split('/')[-1]} + AST)"
+        model_version = f"breathprint-phase2-v1.0 (encoder+probe + AST + LLM-explain)"
         bullets.append(
             f"Phase 1: SSL encoder {encoder_out['num_layers']} layers, dim {encoder_out['hidden_dim']} "
             f"→ layer-weighted probe (AG-REPA seam); probe ยังไม่ได้เทรน (รอข้อมูล IOS)"
         )
+
+    # Phase 2 — real time-grounding: locate the most salient window in the breath clip.
+    if decoded:
+        y0, np0 = decoded[0]
+        ev = _localize_event(y0, np0)
+    else:
+        ev = {"start": 2.1, "end": 2.6}
+    time_events = [{"start": ev["start"], "end": ev["end"], "label": "ช่วงที่มีพลังงานเสียงเด่น (time-grounded)"}]
+
+    # Real acoustic findings — fed to the LLM explainer (Phase 2).
+    findings = {
+        "ast_events": features or {},
+        "encoder_feature_norm": (encoder_out or {}).get("feature_norm"),
+        "time_event": ev,
+        "risk_score": risk,
+        "risk_band": _band(risk),
+        "confidence": confidence,
+        "referral": _referral(risk),
+        "pm25_ugm3": pm25,
+        "exposure_dose_weekly": exposure,
+        "symptom_avg": round(symptom_avg, 2),
+        "age": age,
+        "smoking": smoking,
+        "pef": pef,
+    }
 
     return {
         "risk_score": risk,
         "confidence": confidence,
         "risk_band": _band(risk),
         "explanation_bullets": bullets,
-        "time_events": _time_events(),
+        "time_events": time_events,
         "exposure_delta_pct": meta.get("exposureDeltaPct"),
         "referral_level": _referral(risk),
         "model_version": model_version,
         "encoder": encoder_out,
+        "_findings": findings,
     }
 
 
@@ -248,6 +274,21 @@ def _referral(score: int) -> str:
     if score >= 61:
         return "ios"
     return "monitor"
+
+
+def _localize_event(y, np, sr: int = 16000) -> dict:
+    """Phase 2 time-grounding: the ~0.5s window with the most energy (most salient
+    moment in the recording). Real + deterministic from the actual audio."""
+    win = int(sr * 0.5)
+    if len(y) < win:
+        return {"start": 0.0, "end": round(len(y) / sr, 1)}
+    best_i, best_e = 0, -1.0
+    step = max(1, win // 2)
+    for i in range(0, len(y) - win, step):
+        e = float(np.sqrt(np.mean(np.square(y[i : i + win]))))
+        if e > best_e:
+            best_e, best_i = e, i
+    return {"start": round(best_i / sr, 1), "end": round((best_i + win) / sr, 1)}
 
 
 def _time_events() -> list[dict]:

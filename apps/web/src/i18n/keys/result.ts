@@ -23,6 +23,7 @@ export const result: Bundle = {
 
     // ExplanationPanel
     'explanationTitle': 'คำอธิบาย (audio-LLM)',
+    'llmExplainLabel': 'AI อธิบายจากการวิเคราะห์เสียงจริง',
     'timeGrounding': 'Time-grounding',
 
     // ReferralCard
@@ -94,6 +95,7 @@ export const result: Bundle = {
 
     // ExplanationPanel
     'explanationTitle': 'Explanation (audio-LLM)',
+    'llmExplainLabel': 'AI explanation from real audio analysis',
     'timeGrounding': 'Time-grounding',
 
     // ReferralCard

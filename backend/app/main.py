@@ -23,7 +23,7 @@ from .config import get_settings
 from .inference import _model_cache, analyze
 from . import inference as _inf
 from . import probe
-from .chat import chat
+from .chat import chat, generate_explanation
 
 settings = get_settings()
 
@@ -93,7 +93,10 @@ async def analyze_endpoint(
         breath = None
     if cough == b"":
         cough = None
-    return analyze(breath, cough, meta, settings.hf_audio_model, settings.encoder_model)
+    result = analyze(breath, cough, meta, settings.hf_audio_model, settings.encoder_model)
+    # Phase 2 — audio-grounded LLM explanation (Typhoon) from the real findings.
+    result["explanation_llm"] = await generate_explanation(result.pop("_findings", {}))
+    return result
 
 
 @app.post("/chat")

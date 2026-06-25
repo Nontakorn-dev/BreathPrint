@@ -58,6 +58,8 @@ export interface ScreeningResult {
   exposureDeltaPct: number | null
   referralLevel: ReferralLevel
   modelVersion: string
+  /** Phase 2 — audio-grounded LLM explanation (Typhoon), null if unavailable. */
+  explanationLlm?: string
   createdAt: string
 }
 
@@ -119,6 +121,7 @@ export interface InferenceResponse {
   exposureDeltaPct: number | null
   referralLevel: ReferralLevel
   modelVersion: string
+  explanationLlm?: string
 }
 
 export interface PendingUpload {

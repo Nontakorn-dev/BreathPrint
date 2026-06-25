@@ -103,6 +103,7 @@ export async function processAndSaveScreening(
       confidence: inference.confidence,
       riskBand: inference.riskBand,
       explanationBullets: inference.explanationBullets,
+      explanationLlm: inference.explanationLlm,
       timeEvents: inference.timeEvents,
       exposureDeltaPct: inference.exposureDeltaPct,
       referralLevel: inference.referralLevel,

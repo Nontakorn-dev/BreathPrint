@@ -55,6 +55,7 @@ async function runRemoteInference(req: InferenceRequest): Promise<InferenceRespo
     exposureDeltaPct: data.exposure_delta_pct,
     referralLevel: data.referral_level,
     modelVersion: data.model_version,
+    explanationLlm: data.explanation_llm ?? undefined,
   }
 }
 

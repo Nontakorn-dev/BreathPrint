@@ -87,7 +87,11 @@ export function ResultPage() {
           </div>
 
           <div className="space-y-6">
-            <ExplanationPanel bullets={result.explanationBullets} timeEvents={result.timeEvents} />
+            <ExplanationPanel
+              bullets={result.explanationBullets}
+              timeEvents={result.timeEvents}
+              llmExplanation={result.explanationLlm}
+            />
             <p className="text-xs text-muted text-center lg:text-left px-2">
               {t('result.modelNote', { model: result.modelVersion })}
             </p>
