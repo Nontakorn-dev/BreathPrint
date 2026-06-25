@@ -112,7 +112,7 @@ cd apps/web && npm run dev      # → localhost:5173
 |---|---|---|---|
 | **0 — ปัจจุบัน** ✅ | AST classifier สำเร็จ | pipeline "ของจริง" เสียงเข้าโมเดลจริง (แต่ไม่ใช่งานเรา) | — |
 | **1 — encoder + layer-probe** ✅ | **SSL encoder + layer-weighted probe (AG-REPA/CardiacZ seam)** — **ทำแล้ว live** ใช้ `facebook/hubert-base-ls960` (13 layers/768d) เป็น default; สลับเป็น Dasheng/BEATs ได้ที่ env `HF_ENCODER_MODEL` | **เทคนิคของเราทำงานจริง** — encoder รันบนเสียงจริง → hidden states → layer weights → probe (probe ยังไม่ได้เทรน รอข้อมูล IOS) | รายละเอียดใน `/v1/analyze` (ฟิลด์ `encoder`) + `/health` (`encoder_ready`) |
-| **2 — audio-LLM** | เพิ่ม **Audio Flamingo 3 / Qwen2.5-Omni** สำหรับ explanation + time-grounding (ระบุช่วงเสียงผิดปกติ) | อธิบายผลเป็นภาษา ลด black-box | GPU เยอะ (audio-LLM ใหญ่) |
+| **2 — LLM explanation + time-grounding** ✅ | **audio-grounded LLM explanation** (Typhoon อธิบายจากผลเสียงจริง AST+encoder+เวลา) + **time-grounding จริง** (หาช่วงเสียงเด่นจาก waveform) — **ทำแล้ว live** | หน้าผลแสดง "AI อธิบายจากการวิเคราะห์เสียงจริง" + time event จริง → ลด black-box | true audio-LLM (Audio Flamingo 3) ต้องมี GPU; ตอนนี้ใช้ Typhoon บน CPU ฟรี (LLM อ่านผลจริง ไม่ได้ฟังเสียงตรงๆ) |
 | **3 — โมเดล SAD เฉพาะทาง** 🧬 | เทรน probe บน **ข้อมูล IOS labels** (cohort BreathPrint–Chiang Mai) | โมเดล SAD จริงตาม proposal | **ข้อมูลเสียง + IOS labels** (ยังไม่มีในโลก = ช่องว่างวิจัย), IRB, เวลา |
 
 ### จุดเสียบ (seam) ในโค้ด
