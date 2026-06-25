@@ -27,7 +27,7 @@ def get_settings() -> Settings:
     return Settings(
         typhoon_api_key=os.getenv("TYPHOON_API_KEY") or None,
         typhoon_base_url=os.getenv("TYPHOON_BASE_URL", "https://api.opentyphoon.ai/v1"),
-        typhoon_model=os.getenv("TYPHOON_MODEL", "typhoon-v2.1-instruct"),
+        typhoon_model=os.getenv("TYPHOON_MODEL", "typhoon-v2.1-12b-instruct"),
         hf_audio_model=os.getenv("HF_AUDIO_MODEL", "MIT/ast-finetuned-audioset-10-10-0.4593"),
         cors_origin=os.getenv("CORS_ORIGIN", "*"),
     )
