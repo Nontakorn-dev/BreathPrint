@@ -21,6 +21,11 @@ SYSTEM_PROMPT = """คุณคือ "ผู้ช่วย AI" ของ Breat
 - อ้างอิงผลของผู้ใช้ที่ให้มาในส่วนบริบท อย่าแต่งตัวเลขขึ้นเอง
 - ถ้าข้อมูลบริบทไม่พอ ให้แนะนำให้ผู้ใช้ไปทำการคัดกรองก่อน"""
 
+_FALLBACK = (
+    "ขออภัย ไม่สามารถเรียกผู้ช่วย AI ได้ในขณะนี้ ลองใหม่อีกครั้ง "
+    "หรือดูผลคัดกรองและคำแนะนำส่งตรวจในหน้าผลได้ครับ/ค่ะ"
+)
+
 
 def _ctx_summary(ctx: dict[str, Any]) -> str:
     if not ctx:
@@ -80,9 +85,8 @@ async def chat(message: str, ctx: dict[str, Any]) -> str:
         data = res.json()
         return (data.get("choices") or [{}])[0].get("message", {}).get("content", "").strip()
     except httpx.HTTPStatusError as exc:
-        body = exc.response.text[:400]
-        print(f"[chat] Typhoon HTTP {exc.response.status_code}: {body}")
-        return f"[debug] Typhoon HTTP {exc.response.status_code}: {body}"
+        print(f"[chat] Typhoon HTTP {exc.response.status_code}: {exc.response.text[:400]}")
+        return _FALLBACK
     except Exception as exc:
         print(f"[chat] Typhoon call failed ({type(exc).__name__}): {exc}")
-        return f"[debug] Typhoon failed: {type(exc).__name__}: {exc}"
+        return _FALLBACK
