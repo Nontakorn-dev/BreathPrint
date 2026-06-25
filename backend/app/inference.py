@@ -22,6 +22,7 @@ from typing import Any
 
 _model_cache: dict[str, Any] = {}
 _last_model_error: str | None = None
+_last_encoder_error: str | None = None
 
 # AudioSet ontology labels we extract (lower-cased match).
 _TARGET_LABELS = {
@@ -94,7 +95,13 @@ def _ast_probs(y, np, processor, model) -> dict[str, float]:
     return out
 
 
-def analyze(breath_bytes: bytes | None, cough_bytes: bytes | None, meta: dict, model_id: str) -> dict:
+def analyze(
+    breath_bytes: bytes | None,
+    cough_bytes: bytes | None,
+    meta: dict,
+    model_id: str,
+    encoder_model_id: str | None = None,
+) -> dict:
     symptoms = meta.get("symptoms", {}) or {}
     sym_vals = [float(v) for v in symptoms.values() if isinstance(v, (int, float))]
     symptom_avg = sum(sym_vals) / max(len(sym_vals), 1)
@@ -105,9 +112,10 @@ def analyze(breath_bytes: bytes | None, cough_bytes: bytes | None, meta: dict, m
     pef = meta.get("pefValue")
     screening_id = meta.get("screeningId", "")
 
-    # Try the real model.
+    # AST (audio-event classifier) — interpretable probs (wheeze/cough/...).
     loaded = _load_model(model_id) if model_id else None
     features: dict[str, float] | None = None
+    decoded: list = []  # keep decoded waveforms to reuse for the encoder
     if loaded and (breath_bytes or cough_bytes):
         processor, model = loaded
         agg: dict[str, float] = {}
@@ -117,11 +125,25 @@ def analyze(breath_bytes: bytes | None, cough_bytes: bytes | None, meta: dict, m
             dec = _decode_audio(raw)
             if dec is None:
                 continue
+            decoded.append(dec)
             y, np = dec
             for k, v in _ast_probs(y, np, processor, model).items():
                 agg[k] = max(agg.get(k, 0.0), v)
         if agg:
             features = agg
+
+    # Phase 1: SSL encoder + layer-weighted probe (AG-REPA/CardiacZ seam).
+    encoder_out: dict | None = None
+    if encoder_model_id and decoded:
+        try:
+            from . import probe
+
+            y, _np = decoded[0]  # run on the breath clip
+            encoder_out = probe.extract(y, encoder_model_id)
+        except Exception as exc:
+            global _last_encoder_error
+            _last_encoder_error = f"{type(exc).__name__}: {exc}"
+            print(f"[inference] encoder/probe failed ({type(exc).__name__}): {exc}")
 
     if features is not None:
         risk, confidence, bullets, model_version = _risk_real(
@@ -130,6 +152,13 @@ def analyze(breath_bytes: bytes | None, cough_bytes: bytes | None, meta: dict, m
     else:
         risk, confidence, bullets, model_version = _risk_deterministic(
             symptom_avg, pm25, exposure, age, smoking, pef, screening_id, breath_bytes, cough_bytes
+        )
+
+    if encoder_out is not None:
+        model_version = f"breathprint-phase1-v1.0 (encoder+probe: {encoder_out['encoder'].split('/')[-1]} + AST)"
+        bullets.append(
+            f"Phase 1: SSL encoder {encoder_out['num_layers']} layers, dim {encoder_out['hidden_dim']} "
+            f"→ layer-weighted probe (AG-REPA seam); probe ยังไม่ได้เทรน (รอข้อมูล IOS)"
         )
 
     return {
@@ -141,6 +170,7 @@ def analyze(breath_bytes: bytes | None, cough_bytes: bytes | None, meta: dict, m
         "exposure_delta_pct": meta.get("exposureDeltaPct"),
         "referral_level": _referral(risk),
         "model_version": model_version,
+        "encoder": encoder_out,
     }
 
 

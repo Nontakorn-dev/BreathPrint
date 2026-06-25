@@ -22,6 +22,7 @@ from pydantic import BaseModel
 from .config import get_settings
 from .inference import _model_cache, analyze
 from . import inference as _inf
+from . import probe
 from .chat import chat
 
 settings = get_settings()
@@ -45,11 +46,15 @@ class ChatRequest(BaseModel):
 def health():
     model_id = settings.hf_audio_model
     model_ready = bool(_model_cache.get(model_id))
+    enc_ready = bool(probe._ENC.get(settings.encoder_model))
     return {
         "status": "ok",
         "audio_model": model_id,
         "audio_model_ready": model_ready,
         "audio_model_error": _inf._last_model_error,
+        "encoder_model": settings.encoder_model,
+        "encoder_ready": enc_ready,
+        "encoder_error": _inf._last_encoder_error,
         "typhoon_configured": bool(settings.typhoon_api_key),
         "typhoon_model": settings.typhoon_model,
     }
@@ -88,7 +93,7 @@ async def analyze_endpoint(
         breath = None
     if cough == b"":
         cough = None
-    return analyze(breath, cough, meta, settings.hf_audio_model)
+    return analyze(breath, cough, meta, settings.hf_audio_model, settings.encoder_model)
 
 
 @app.post("/chat")
